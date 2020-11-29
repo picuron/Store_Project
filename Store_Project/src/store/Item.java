@@ -17,6 +17,14 @@ public class Item {
         this.description = description;
     }
 
+    public void reduceQuantity(int reduceBy){
+       if(this.quantity > reduceBy){
+           this.quantity = this.quantity - reduceBy;
+       }
+       else{
+           System.out.println("Cannot reduce into negative number");
+       }
+    }
     public void setItemName(String name){
         this.itemName = name;
     }

@@ -3,10 +3,10 @@ package store;
 public class Finances {
 
     // Changes in revenue and profit not supported yet
-    static double revenue;
-    static double profit;
-    static double COG;
-    static double value;
+    private static double revenue;
+    private static double profit;
+    private static double COG;
+    private static double value;
 
     public static void addCOG(double addCOG){
         COG = COG + addCOG;

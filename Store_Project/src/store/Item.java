@@ -5,11 +5,11 @@ package store;
 public class Item {
 
     //Implement item Category
-    String itemName;
-    int quantity;
-    double listPrice;
-    double COG;
-    String description;
+    private String itemName;
+    private int quantity;
+    private double listPrice;
+    private double COG;
+    private String description;
 
     public Item(String name, int quantity, double listPrice, double COG, String description){
         this.itemName = name;

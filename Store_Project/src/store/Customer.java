@@ -1,6 +1,7 @@
 package store;
 
 public class Customer {
+    private int CustomerID;
     private String name;
     private String email;
     private String address;

@@ -21,5 +21,15 @@ public class TesterClass {
         i1.changeListPrice(50);
         System.out.println(Finances.getValue());
         System.out.println(Finances.getCOG());
+
+        Item[] items = new Item[2];
+        items[0] = i1;
+        items[1] = i2;
+        Order o1 = new Order(1,2, items);
+        System.out.println(o1.getItems());
+
+        for (Item i: o1.getItems()){
+            System.out.println(i.getItemName());
+        }
     }
 }

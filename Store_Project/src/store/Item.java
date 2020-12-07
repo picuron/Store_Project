@@ -42,6 +42,8 @@ public class Item {
     public void changeListPrice(double newPrice){
         Finances.reduceValue(listPrice*quantity);
         Finances.addValue((newPrice*quantity));
+
+        if (newPrice < 0) { System.out.println("Cannot reduce price into negative number"); }
     }
 
     public void setItemName(String name){
@@ -57,7 +59,11 @@ public class Item {
     }
 
     public void setQuantity(int quantity) {
-        this.quantity = quantity;
+        if (quantity < 0) {
+            System.out.println("Cannot set quantity as a negative number");
+        } else{
+            this.quantity = quantity;
+        }
     }
 
     public double getListPrice() {
@@ -82,5 +88,9 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void updateCustomerItems(Item selectedItem) {
+
     }
 }

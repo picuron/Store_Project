@@ -45,4 +45,5 @@ public class Customer {
     public void setCreditCardNumber(int creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
     }
+
 }

@@ -40,8 +40,8 @@ public class TesterClass {
         System.out.println(totalPrice);
 
         ArrayList<Item> customerItems = new ArrayList<Item>();
-        customerOrder.setOrderID(1);
-        customerOrder.setCustomerID(1);
+        //customerOrder.setOrderID(1);
+        //customerOrder.setCustomerID(1);
 
         System.out.println("Hello there! Welcome to our store. Here are the actions you can take:");
         menuOptions(o1);

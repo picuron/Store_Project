@@ -11,18 +11,7 @@ public class CustomerView {
 
     public static void Run(){
 
-        //Initalize objects to use and add to ArrayList- THIS IS TEMPORARY - will add File I/O and adding objects through merchant view
-        Item i1 = new Item("Shirt", 3, 40, 15, "Soft, cotton");
-        Item i2 = new Item("Hat", 10, 10, 5, "Baby blue, bucket-style");
-        Item i3 = new Item("Toy", 15, 30, 20, "Baby Toy");
-        Item i4 = new Item("Chair", 20, 100, 25, "Nice Chair");
-        Item i5 = new Item("0 Quantity Item", 0, 10, 15, "No stock");
-        Items = new ArrayList<Item>();
-        Items.add(i1);
-        Items.add(i2);
-        Items.add(i3);
-        Items.add(i4);
-        Items.add(i5);
+        Items = StoreApplication.getItems();
 
         //Hash map will host <Item, Quantity>
         cart = new HashMap<Item, Integer>();
@@ -137,5 +126,9 @@ public class CustomerView {
         for(Item i: cart.keySet()){
             System.out.println("Item: " + i.getItemName() + " | Quantity: " + cart.get(i));
         }
+    }
+
+    public static ArrayList<Item> getItems(){
+        return Items;
     }
 }

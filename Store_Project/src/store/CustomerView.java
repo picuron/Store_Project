@@ -107,7 +107,7 @@ public class CustomerView {
         //If this returns null, that means the item is not in the cart, so we need to create a new record of it
         if(cart.get(selectedItem) == null){
             cart.put(selectedItem, quantityInt);
-            System.out.println("Added "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + "to cart.");
+            System.out.println("Added "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + " to cart.");
             selectedItem.reduceQuantity(quantityInt);
             listCart();
         }
@@ -175,15 +175,26 @@ public class CustomerView {
         cart.remove(selectedItem);
         cart.put(selectedItem, cartQuantity - quantityInt);
         System.out.println("Updated cart to have "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + ".");
-        selectedItem.reduceQuantity(cartQuantity + quantityInt);
+        selectedItem.increaseQuantity(quantityInt);
         listCart();
     }
 
     public static void listCart(){
-        System.out.println("Listed below is your current cart");
+        double cartTotal = 0;
+
         for(Item i: cart.keySet()){
-            System.out.println("Item: " + i.getItemName() + " | Quantity: " + cart.get(i));
+            // trying to determine if cart is empty or not
+            // unable to display; isEmpty() doesn't work, neither does null and ""
+//            if(!i.getItemName().isEmpty()){
+//                System.out.println("There's nothing in your cart yet");
+//                break;
+//            } else {
+                System.out.println("Listed below is your current cart");
+                System.out.println("Item: " + i.getItemName() + " | Quantity: " + cart.get(i));
+                cartTotal = cartTotal + (i.getListPrice() * cart.get(i));
+//            }
         }
+        System.out.println("Cart total: " + cartTotal);
     }
 
     public static void checkoutCart(){
@@ -194,15 +205,19 @@ public class CustomerView {
         String phoneNumber = null;
         String streetName = null;
         String city = null;
-        String state = null;
-        String zipCode = null;
+        String province = null;
+        String postalCode = null;
+        String creditCardNumber = null;
+        String creditCardExpirationDate = null;
         boolean validCustomerName = false;
         boolean validEmail = false;
         boolean validPhoneNumber = false;
         boolean validStreetName = false;
         boolean validCity = false;
-        boolean validState = false;
-        boolean validZipCode = false;
+        boolean validProvince = false;
+        boolean validPostalCode = false;
+        boolean validCreditCardNumber = false;
+        boolean validCreditCardExpirationDate = false;
 
         // Validate name
         while (!validCustomerName){
@@ -257,7 +272,7 @@ public class CustomerView {
 
         // Validate city
         while (!validCity){
-            System.out.println("Enter your city (example: Chicago)");
+            System.out.println("Enter your city (example: Ottawa)");
             city = inputScanner.nextLine();
 
             if (!city.matches("([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)")){
@@ -267,36 +282,58 @@ public class CustomerView {
             }
         }
 
-        // Validate state
-        while (!validState){
-            System.out.println("Enter your state (example: Illinois)");
-            state = inputScanner.nextLine();
+        // Validate province
+        while (!validProvince){
+            System.out.println("Enter your province (example: Ontario)");
+            province = inputScanner.nextLine();
 
-            if (!state.matches("([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)")){
-                System.out.println("Your state is invalid; please try again!");
+            if (!province.matches("([a-zA-Z]+|[a-zA-Z]+\\s[a-zA-Z]+)")){
+                System.out.println("Your province is invalid; please try again!");
             } else {
-                validState = true;
+                validProvince = true;
             }
         }
 
-        // Validate zip code
-        while (!validZipCode){
-            System.out.println("Enter your zip code (example: 57753)");
-            zipCode = inputScanner.nextLine();
+        // Validate postal code
+        while (!validPostalCode){
+            System.out.println("Enter your postal code (example: 577533)");
+            postalCode = inputScanner.nextLine();
 
-            if (!zipCode.matches("\\d{5}")){
-                System.out.println("Your zip code is invalid; please try again!");
+            if (!postalCode.matches("\\d{6}")){
+                System.out.println("Your postal code is invalid; please try again!");
             } else {
-                validZipCode = true;
+                validPostalCode = true;
+            }
+        }
+
+        // Validate credit card number
+        while (!validCreditCardNumber){
+            System.out.println("Enter your credit card number");
+            creditCardNumber = inputScanner.nextLine();
+
+            if (!creditCardNumber.matches("\\d{16}")){
+                System.out.println("Your credit card number is invalid; please try again!");
+            } else {
+                validCreditCardNumber = true;
+            }
+        }
+
+        // Validate credit card number
+        while (!validCreditCardExpirationDate){
+            System.out.println("Enter your credit card expiration date");
+            creditCardExpirationDate = inputScanner.nextLine();
+
+            if (!creditCardExpirationDate.matches("(0[1-9]|10|11|12)/20[0-9]{2}$")){
+                System.out.println("Your credit card expiration date is invalid; please try again!");
+            } else {
+                validCreditCardExpirationDate = true;
             }
         }
 
         listCart();
         System.out.println("We have your information saved! Email: " + email + " | Phone number: " + phoneNumber);
-        System.out.println("Address: " + streetName + ", " + city + ", " + state + ", " + zipCode);
+        System.out.println("Address: " + streetName + ", " + city + ", " + province + ", " + postalCode);
         System.out.println("Thanks " + customerName + " for your purchase!");
-
-
     }
 
     public static ArrayList<Item> getItems(){

@@ -9,15 +9,15 @@ import java.util.regex.*;
 public class CustomerView {
     private static ArrayList<Item> Items;
     private static ArrayList<Customer> Customers;
+    private static ArrayList<Order> Orders;
     private static HashMap<Item, Integer> cart;
 
     public static void Run(){
 
         Items = StoreApplication.getItems();
-
-        //Hash map will host <Item, Quantity>
         cart = new HashMap<Item, Integer>();
         Customers = new ArrayList<Customer>();
+        Orders = new ArrayList<Order>();
 
 
 
@@ -229,6 +229,7 @@ public class CustomerView {
     public static void checkoutCart(){
         Scanner inputScanner = new Scanner(System.in);
         String customerInput;
+        Customer customer = null;
         boolean validCustomerInput = false;
         boolean validInputNameNotFound = false;
         boolean validCustomerName = false;
@@ -243,6 +244,7 @@ public class CustomerView {
 
                 for(Customer c: Customers){
                     if(c.getName().equals(customerInput)){
+                        customer = c;
                         validCustomerInput = true;
                         validCustomerName = true;
                     }
@@ -261,7 +263,7 @@ public class CustomerView {
                         }
                         else if (customerInput.equals("2")){
                             validCustomerInput = true;
-                            createCustomer();
+                            customer = createCustomer();
                             break;
                         }
                         else{
@@ -273,18 +275,21 @@ public class CustomerView {
             else if(customerInput.equals("N")){
                 System.out.println("Okay, you will need to create an account.");
                 validCustomerInput = true;
-                createCustomer();
+                customer = createCustomer();
             }
             else{
                 System.out.println("Invalid input. Please try again (case-sensitive).");
             }
 
         }
-        System.out.println("Time to checkout!");
-        
+        Order o = new Order(customer, cart);
+        System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Order Confirmed. Thank you for your order " + customer.getName() + "!");
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        Orders.add(o);
     }
 
-    public static void createCustomer(){
+    public static Customer createCustomer(){
         Scanner inputScanner = new Scanner(System.in);
         String customerName = null;
         String email = null;
@@ -420,6 +425,8 @@ public class CustomerView {
         Customers.add(c);
         System.out.println("We have your information saved! Email: " + email + " | Phone number: " + phoneNumber);
         System.out.println("Address: " + streetName + ", " + city + ", " + province + ", " + postalCode);
+
+        return c;
     }
     public static ArrayList<Item> getItems(){
         return Items;

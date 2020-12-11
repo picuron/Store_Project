@@ -1,10 +1,12 @@
 package store;
 
+import java.util.HashMap;
+
 public class Order {
     private Customer customer;
-    private Item[] items;
+    private HashMap<Item, Integer> items;
 
-    public Order(Customer customer, Item[] items) {
+    public Order(Customer customer, HashMap<Item, Integer> items) {
         this.customer = customer;
         this.items = items;
     }
@@ -17,11 +19,11 @@ public class Order {
         this.customer = customer;
     }
 
-    public Item[] getItems() {
+    public HashMap<Item, Integer> getItems() {
         return items;
     }
 
-    public void setItems(Item[] items) {
+    public void setItems(HashMap<Item, Integer> items) {
         this.items = items;
     }
 }

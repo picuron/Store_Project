@@ -17,43 +17,67 @@ public class CustomerView {
         //Hash map will host <Item, Quantity>
         cart = new HashMap<Item, Integer>();
 
+
+
         //User Menu
         Scanner inputScanner = new Scanner(System.in);
         boolean inProgress = true;
         while(inProgress) {
-            System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] Exit");
-            String userInput = inputScanner.nextLine();
-            int userInputFinal = Integer.valueOf(userInput);
+            boolean validMenuInput = false;
+            while(!validMenuInput){
+                System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] Exit");
+                String userInput = inputScanner.nextLine();
 
-            switch (userInputFinal) {
-                case 1:
-                    printItemNames();
-                    break; // exit out of switch statement
-                case 2:
-                    addItemToCart();
-                    break;
-                case 3:
-                    removeItemFromCart();
-                    break;
-                case 4:
-                    listCart();
-                    break;
-                case 5:
-                    inProgress = false;
-                    checkoutCart();
-                    break;
+                int userInputFinal= 0;
+
+                try{
+                    userInputFinal = Integer.valueOf(userInput);
+                }
+                catch(NumberFormatException e){
+                    validMenuInput = false;
+                }
+
+                if(userInputFinal>0 && userInputFinal<7){
+                    System.out.println("Posted");
+                    switch (userInputFinal) {
+                        case 1:
+                            printItemNames();
+                            break; // exit out of switch statement
+                        case 2:
+                            addItemToCart();
+                            break;
+                        case 3:
+                            removeItemFromCart();
+                            break;
+                        case 4:
+                            listCart();
+                            break;
+                        case 5:
+                            inProgress = false;
+                            checkoutCart();
+                            break;
+                        case 6:
+                            break;
+                    }
+                }
+                else{
+                    System.out.println("Invalid input.");
+                }
             }
         }
     }
 
     //This will print all items in the inventory, if the quantity is greater than 0
     public static void printItemNames(){
+        System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Items in Stock:");
         for(Item i: Items){
             //Don't want to print out of stock items, so quantity must be greater than 0
             if(i.getQuantity() > 0){
                 System.out.println("Item: " + i.getItemName() + " | Quantity: " + i.getQuantity() + " | Price: " + i.getListPrice() + " | Description: " + i.getDescription());
             }
         }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static void addItemToCart(){
@@ -65,7 +89,6 @@ public class CustomerView {
         int quantityInt = -1;
         Item selectedItem = null;
 
-        listCart();
         //Doesn't continue until a valid item name is given
         while(!validName){
             System.out.println("Enter the name of the item to add to your cart (case sensitive)");
@@ -133,7 +156,6 @@ public class CustomerView {
         int quantityInt = -1;
         Item selectedItem = null;
 
-        listCart();
         while(!validName){
             System.out.println("Enter the name of the item to remove from your cart (case sensitive)");
             itemName = inputScanner.nextLine();
@@ -181,20 +203,20 @@ public class CustomerView {
 
     public static void listCart(){
         double cartTotal = 0;
-
-        for(Item i: cart.keySet()){
-            // trying to determine if cart is empty or not
-            // unable to display; isEmpty() doesn't work, neither does null and ""
-//            if(!i.getItemName().isEmpty()){
-//                System.out.println("There's nothing in your cart yet");
-//                break;
-//            } else {
-                System.out.println("Listed below is your current cart");
+        System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        if(cart.isEmpty()){
+            System.out.println("There's nothing in your cart yet");
+        }
+        else{
+            System.out.println("Listed below is your current cart");
+            for(Item i: cart.keySet()){
                 System.out.println("Item: " + i.getItemName() + " | Quantity: " + cart.get(i));
                 cartTotal = cartTotal + (i.getListPrice() * cart.get(i));
 //            }
+            }
+            System.out.println("Cart total: $" + cartTotal);
         }
-        System.out.println("Cart total: " + cartTotal);
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 
     public static void checkoutCart(){

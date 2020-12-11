@@ -1,22 +1,12 @@
 package store;
 
 public class Order {
-    private int orderID;
-    private int customerID;
+    private Customer customer;
     private Item[] items;
 
     public Order(int orderID, int customerID, Item[] items) {
-        this.orderID = orderID;
         this.customerID = customerID;
         this.items = items;
-    }
-
-    public int getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(int orderID) {
-        this.orderID = orderID;
     }
 
     public int getCustomerID() {

@@ -1,7 +1,6 @@
 package store;
 
 public class Customer {
-    private int CustomerID;
     private String name;
     private String email;
     private String phoneNumber;
@@ -9,13 +8,12 @@ public class Customer {
     private String city;
     private String province;
     private String postalCode;
-    private int creditCardNumber;
+    private String creditCardNumber;
     private String creditCardExpiry;
 
-    // For now, customer attributes can't be changed. We should try to add support for this.
-    public Customer(int customerID, String name, String email, String phoneNumber, String streetName, String city, String province,
-                    String postalCode, int creditCardNumber, String creditCardExpiry) {
-        CustomerID = customerID;
+    // For now, customer attributes can't be changed on customer side. We should try to add support for this.
+    public Customer(String name, String email, String phoneNumber, String streetName, String city, String province,
+                    String postalCode, String creditCardNumber, String creditCardExpiry) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -25,14 +23,6 @@ public class Customer {
         this.postalCode = postalCode;
         this.creditCardNumber = creditCardNumber;
         this.creditCardExpiry = creditCardExpiry;
-    }
-
-    public int getCustomerID() {
-        return CustomerID;
-    }
-
-    public void setCustomerID(int customerID) {
-        CustomerID = customerID;
     }
 
     public String getName() {
@@ -91,11 +81,11 @@ public class Customer {
         this.postalCode = postalCode;
     }
 
-    public int getCreditCardNumber() {
+    public String getCreditCardNumber() {
         return creditCardNumber;
     }
 
-    public void setCreditCardNumber(int creditCardNumber) {
+    public void setCreditCardNumber(String creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
     }
 

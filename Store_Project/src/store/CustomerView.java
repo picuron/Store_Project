@@ -8,6 +8,7 @@ import java.util.regex.*;
 
 public class CustomerView {
     private static ArrayList<Item> Items;
+    private static ArrayList<Customer> Customers;
     private static HashMap<Item, Integer> cart;
 
     public static void Run(){
@@ -16,6 +17,7 @@ public class CustomerView {
 
         //Hash map will host <Item, Quantity>
         cart = new HashMap<Item, Integer>();
+        Customers = new ArrayList<Customer>();
 
 
 
@@ -38,7 +40,6 @@ public class CustomerView {
                 }
 
                 if(userInputFinal>0 && userInputFinal<7){
-                    System.out.println("Posted");
                     switch (userInputFinal) {
                         case 1:
                             printItemNames();
@@ -53,9 +54,15 @@ public class CustomerView {
                             listCart();
                             break;
                         case 5:
-                            inProgress = false;
-                            checkoutCart();
-                            break;
+                            if(cart.isEmpty()){
+                                System.out.println("Your cart is empty! You can't check out with an empty cart");
+                            }
+                            else{
+                                inProgress = false;
+                                checkoutCart();
+                                break;
+                            }
+
                         case 6:
                             break;
                     }
@@ -220,7 +227,64 @@ public class CustomerView {
     }
 
     public static void checkoutCart(){
+        Scanner inputScanner = new Scanner(System.in);
+        String customerInput;
+        boolean validCustomerInput = false;
+        boolean validInputNameNotFound = false;
+        boolean validCustomerName = false;
 
+        while(!validCustomerInput){
+            System.out.println("Do you already have an account with us? (Y/N)");
+            customerInput = inputScanner.nextLine();
+
+            if(customerInput.equals("Y")){
+                System.out.println("Great, please enter your full name");
+                customerInput = inputScanner.nextLine();
+
+                for(Customer c: Customers){
+                    if(c.getName().equals(customerInput)){
+                        validCustomerInput = true;
+                        validCustomerName = true;
+                    }
+                }
+
+                if(validCustomerName == false){
+                    while(validInputNameNotFound == false){
+                        System.out.println("We couldn't find your name as an existing customer. What would you like to do: ");
+                        System.out.println("[1] Try again");
+                        System.out.println("[2] Make new account");
+                        customerInput = inputScanner.nextLine();
+
+                        if(customerInput.equals("1")){
+                            validCustomerInput = false;
+                            break;
+                        }
+                        else if (customerInput.equals("2")){
+                            validCustomerInput = true;
+                            createCustomer();
+                            break;
+                        }
+                        else{
+                            System.out.println("Invalid input, please try again.");
+                        }
+                    }
+                }
+            }
+            else if(customerInput.equals("N")){
+                System.out.println("Okay, you will need to create an account.");
+                validCustomerInput = true;
+                createCustomer();
+            }
+            else{
+                System.out.println("Invalid input. Please try again (case-sensitive).");
+            }
+
+        }
+        System.out.println("Time to checkout!");
+        
+    }
+
+    public static void createCustomer(){
         Scanner inputScanner = new Scanner(System.in);
         String customerName = null;
         String email = null;
@@ -352,12 +416,11 @@ public class CustomerView {
             }
         }
 
-        listCart();
+        Customer c = new Customer(customerName, email, phoneNumber, streetName, city, province, postalCode, creditCardNumber, creditCardExpirationDate);
+        Customers.add(c);
         System.out.println("We have your information saved! Email: " + email + " | Phone number: " + phoneNumber);
         System.out.println("Address: " + streetName + ", " + city + ", " + province + ", " + postalCode);
-        System.out.println("Thanks " + customerName + " for your purchase!");
     }
-
     public static ArrayList<Item> getItems(){
         return Items;
     }

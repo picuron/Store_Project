@@ -107,7 +107,7 @@ public class CustomerView {
         //If this returns null, that means the item is not in the cart, so we need to create a new record of it
         if(cart.get(selectedItem) == null){
             cart.put(selectedItem, quantityInt);
-            System.out.println("Added "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + "to cart.");
+            System.out.println("Added "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + " to cart.");
             selectedItem.reduceQuantity(quantityInt);
             listCart();
         }

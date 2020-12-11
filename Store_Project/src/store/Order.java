@@ -4,17 +4,17 @@ public class Order {
     private Customer customer;
     private Item[] items;
 
-    public Order(int orderID, int customerID, Item[] items) {
-        this.customerID = customerID;
+    public Order(Customer customer, Item[] items) {
+        this.customer = customer;
         this.items = items;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Item[] getItems() {

@@ -12,8 +12,6 @@ public class Cart {
         this.subTotal = subTotal;
         this.order = order;
 
-        order.setOrderID(1);
-        order.setCustomerID(1);
 
 //        order.setItems();
     }

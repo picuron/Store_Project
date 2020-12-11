@@ -27,7 +27,7 @@ public class TesterClass {
         items[0] = i1;
         items[1] = i1;
         items[2] = i2;
-        Order o1 = new Order(1, 2, items);
+        //Order o1 = new Order(1, 2, items);
 
         double totalPrice = 0;
         for (Item i: items){

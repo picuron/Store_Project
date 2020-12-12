@@ -28,6 +28,26 @@ public class Finances {
         }
     }
 
+    public static void addRevenue(double addRevenue){
+        revenue = revenue + addRevenue;
+    }
+
+    public static void reduceRevenue(double reduceRevenue){
+        if (reduceRevenue <= revenue) {
+            revenue = revenue - reduceRevenue;
+        }
+    }
+
+    public static void addProfit(double addProfit){
+        profit = profit + addProfit;
+    }
+
+    public static void reduceProfit(double reduceProfit){
+        if (reduceProfit <= profit) {
+            profit = profit - reduceProfit;
+        }
+    }
+
     public static double getRevenue() {
         return revenue;
     }

@@ -1,8 +1,9 @@
 package store;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Order {
+public class Order implements Serializable {
     private Customer customer;
     private HashMap<Item, Integer> items;
 

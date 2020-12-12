@@ -7,6 +7,15 @@ public class Finances {
     private static double profit;
     private static double COG;
     private static double value;
+    private static double tax;
+
+    public static void setTax(double setTaxTo){
+        tax = setTaxTo;
+    }
+
+    public static double getTax(){
+        return tax;
+    }
 
     public static void addCOG(double addCOG){
         COG = COG + addCOG;

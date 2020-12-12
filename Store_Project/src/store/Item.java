@@ -12,6 +12,7 @@ public class Item implements Serializable {
     private double listPrice;
     private double COG;
     private String description;
+    private int numSold;
 
 
     public Item(String name, int quantity, double listPrice, double COG, String description){
@@ -20,29 +21,20 @@ public class Item implements Serializable {
         this.listPrice = listPrice;
         this.COG = COG;
         this.description = description;
+        numSold = 0;
 
         Finances.addCOG(COG*quantity);
         Finances.addValue(listPrice*quantity);
-
-        //StoreApplication.writeToItemFile(this);
     }
 
-//    public void writeToItemFile(Item item){
-//        try{
-//            System.out.println(item);
-//            FileOutputStream f = new FileOutputStream(StoreApplication.getItemFile());
-//            ObjectOutputStream o = new ObjectOutputStream(f);
-//            o.writeObject(item);
-//            o.close();
-//            f.close();
-//        }
-//        catch (FileNotFoundException e) {
-//            System.out.println("File not found");
-//        } catch (IOException e) {
-//            System.out.println("Error initializing stream");
-//        }
-//
-//    }
+    public int getNumSold(){
+        return numSold;
+    }
+
+    public void increaseNumSold(int increaseBy){
+        this.numSold = this.numSold + increaseBy;
+    }
+
     public void reduceQuantity(int reduceBy){
        if(this.quantity > reduceBy){
            this.quantity = this.quantity - reduceBy;

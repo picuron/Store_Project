@@ -14,14 +14,10 @@ public class CustomerView {
 
     public static void Run(){
 
-        Items = StoreApplication.getItems();
         cart = new HashMap<Item, Integer>();
-        Customers = new ArrayList<Customer>();
-        Orders = new ArrayList<Order>();
-
-        // This is just for testing, so we don't have to keep entering new customers each time we run
-        Customer Eric = new Customer("Eric Herscovich" , "er@gmail.com", "613-883-8090", "52 fdhjds" , "Ottawa", " Ont", "123456", "1234567891234567", "03/2020");
-        Customers.add(Eric);
+        Items = StoreApplication.getItems();
+        Customers = StoreApplication.getCustomers();
+        Orders = StoreApplication.getOrders();
 
         //User Menu
         Scanner inputScanner = new Scanner(System.in);
@@ -67,8 +63,11 @@ public class CustomerView {
                             }
 
                         case 6:
+                            for(Customer c: Customers){
+                                System.out.println(c.getName());
+                            }
                             for(Order c: Orders){
-                               System.out.println(c.getCustomer());
+                               System.out.println(c.getCustomer().getName());
                                System.out.println(c.getItems());
                             }
                             break;
@@ -296,6 +295,8 @@ public class CustomerView {
         }
         Order o = new Order(customer, cart);
         Orders.add(o);
+        FileRW.writeOrder(Orders);
+        FileRW.writeItems(Items);
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Order Confirmed. Thank you for your order " + customer.getName() + "!");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -438,6 +439,7 @@ public class CustomerView {
 
         Customer c = new Customer(customerName, email, phoneNumber, streetName, city, province, postalCode, creditCardNumber, creditCardExpirationDate);
         Customers.add(c);
+        FileRW.writeCustomer(Customers);
         System.out.println("We have your information saved! Email: " + email + " | Phone number: " + phoneNumber);
         System.out.println("Address: " + streetName + ", " + city + ", " + province + ", " + postalCode);
 

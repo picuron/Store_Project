@@ -19,7 +19,9 @@ public class CustomerView {
         Customers = new ArrayList<Customer>();
         Orders = new ArrayList<Order>();
 
-
+        // This is just for testing, so we don't have to keep entering new customers each time we run
+        Customer Eric = new Customer("Eric Herscovich" , "er@gmail.com", "613-883-8090", "52 fdhjds" , "Ottawa", " Ont", "123456", "1234567891234567", "03/2020");
+        Customers.add(Eric);
 
         //User Menu
         Scanner inputScanner = new Scanner(System.in);
@@ -56,6 +58,7 @@ public class CustomerView {
                         case 5:
                             if(cart.isEmpty()){
                                 System.out.println("Your cart is empty! You can't check out with an empty cart");
+                                break;
                             }
                             else{
                                 inProgress = false;
@@ -68,7 +71,7 @@ public class CustomerView {
                                System.out.println(c.getCustomer());
                                System.out.println(c.getItems());
                             }
-                            //break;
+                            break;
                     }
                 }
                 else{
@@ -160,7 +163,7 @@ public class CustomerView {
 
     public static void removeItemFromCart() {
         Scanner inputScanner = new Scanner(System.in);
-        printItemNames();
+        listCart();
         boolean validName = false;
         boolean validQuantity = false;
         String itemName = null;
@@ -206,8 +209,13 @@ public class CustomerView {
         cartQuantity = cart.get(selectedItem);
         //Remove item from cart, so we can add with updated value
         cart.remove(selectedItem);
-        cart.put(selectedItem, cartQuantity - quantityInt);
-        System.out.println("Updated cart to have "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + ".");
+        if(cartQuantity - quantityInt != 0){
+            cart.put(selectedItem, cartQuantity - quantityInt);
+            System.out.println("Updated cart to have "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + ".");
+        }
+        else{
+            System.out.println("Removed " + selectedItem.getItemName() + " from your cart.");
+        }
         selectedItem.increaseQuantity(quantityInt);
         listCart();
     }
@@ -216,7 +224,7 @@ public class CustomerView {
         double cartTotal = 0;
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         if(cart.isEmpty()){
-            System.out.println("There's nothing in your cart yet");
+            System.out.println("Your cart is empty.");
         }
         else{
             System.out.println("Listed below is your current cart");
@@ -287,10 +295,13 @@ public class CustomerView {
 
         }
         Order o = new Order(customer, cart);
+        Orders.add(o);
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Order Confirmed. Thank you for your order " + customer.getName() + "!");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        Orders.add(o);
+
+        cart = new HashMap<Item, Integer>();
+        //cart.clear();
     }
 
     public static Customer createCustomer(){

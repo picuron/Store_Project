@@ -64,7 +64,11 @@ public class CustomerView {
                             }
 
                         case 6:
-                            break;
+                            for(Order c: Orders){
+                               System.out.println(c.getCustomer());
+                               System.out.println(c.getItems());
+                            }
+                            //break;
                     }
                 }
                 else{

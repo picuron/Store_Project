@@ -1,8 +1,10 @@
 package store;
 
+import java.io.*;
+
 //Currently assuming that the only aspects of an item that can change is quantity and listPrice, assuming COG
 //won't change
-public class Item {
+public class Item implements Serializable {
 
     //Implement item Category
     private String itemName;
@@ -10,6 +12,7 @@ public class Item {
     private double listPrice;
     private double COG;
     private String description;
+
 
     public Item(String name, int quantity, double listPrice, double COG, String description){
         this.itemName = name;
@@ -20,8 +23,26 @@ public class Item {
 
         Finances.addCOG(COG*quantity);
         Finances.addValue(listPrice*quantity);
+
+        //StoreApplication.writeToItemFile(this);
     }
 
+//    public void writeToItemFile(Item item){
+//        try{
+//            System.out.println(item);
+//            FileOutputStream f = new FileOutputStream(StoreApplication.getItemFile());
+//            ObjectOutputStream o = new ObjectOutputStream(f);
+//            o.writeObject(item);
+//            o.close();
+//            f.close();
+//        }
+//        catch (FileNotFoundException e) {
+//            System.out.println("File not found");
+//        } catch (IOException e) {
+//            System.out.println("Error initializing stream");
+//        }
+//
+//    }
     public void reduceQuantity(int reduceBy){
        if(this.quantity > reduceBy){
            this.quantity = this.quantity - reduceBy;

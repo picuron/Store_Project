@@ -25,7 +25,7 @@ public class CustomerView {
         while(inProgress) {
             boolean validMenuInput = false;
             while(!validMenuInput){
-                System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] Exit program");
+                System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] View Past Orders [7] Exit program");
                 String userInput = inputScanner.nextLine();
 
                 int userInputFinal= 0;
@@ -61,8 +61,10 @@ public class CustomerView {
                                 checkoutCart();
                                 break;
                             }
-
                         case 6:
+                            viewOrders();
+                            break;
+                        case 7:
                             System.out.println("Thank you for shopping with us!");
                             //Ensure all changes are saved
                             FileRW.writeItems(Items);
@@ -70,7 +72,6 @@ public class CustomerView {
                             FileRW.writeCustomer(Customers);
                             FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), Finances.getTax());
                             System.exit(1);
-
                     }
                 }
                 else{
@@ -246,7 +247,6 @@ public class CustomerView {
         boolean validCustomerInput = false;
         boolean validInputNameNotFound = false;
         boolean validCustomerName = false;
-        boolean madeAccount = false;
 
         outerloop:
         while(!validCustomerInput){
@@ -496,6 +496,99 @@ public class CustomerView {
 
         return c;
     }
+
+    public static void viewOrders(){
+        Scanner inputScanner = new Scanner(System.in);
+        String customerInput;
+        Customer customer = null;
+        boolean validCustomerInput = false;
+        boolean validInputNameNotFound = false;
+        boolean validCustomerName = false;
+
+        outerloop:
+        while(!validCustomerInput) {
+            System.out.println("You need an account to view orders. Do you already have an account with us? (Y/N)");
+            customerInput = inputScanner.nextLine();
+
+            if (customerInput.equals("Y")) {
+                System.out.println("Great, please enter your full name");
+                customerInput = inputScanner.nextLine();
+
+                for (Customer c : Customers) {
+                    if (c.getName().equals(customerInput)) {
+                        customer = c;
+                        validCustomerInput = true;
+                        validCustomerName = true;
+                    }
+                }
+
+                boolean validPassword = false;
+                if (validCustomerName == false) {
+                    while (validInputNameNotFound == false) {
+                        System.out.println("We couldn't find your name as an existing customer. What would you like to do: ");
+                        System.out.println("[1] Try again");
+                        System.out.println("[2] Exit");
+                        customerInput = inputScanner.nextLine();
+
+                        if (customerInput.equals("1")) {
+                            validCustomerInput = false;
+                            break;
+                        } else if (customerInput.equals("2")) {
+                            validCustomerInput = true;
+                            break;
+                        } else {
+                            System.out.println("Invalid input, please try again.");
+                        }
+                    }
+                } else {
+                    System.out.println("Found you!");
+                    while (!validPassword) {
+                        System.out.println("Please enter your password to confirm it's you: ");
+                        customerInput = inputScanner.nextLine();
+
+                        if (customer.getPassword().equals(customerInput)) {
+                            System.out.println("Perfect, found you!");
+
+                            int counter = 1;
+                            for(Order o: Orders){
+                                validPassword = true;
+                                if(o.getCustomer().getName().equals(customer.getName()) && o.getCustomer().getPassword().equals(customer.getPassword())){
+                                    HashMap<Item, Integer> items = new HashMap<Item, Integer>();
+                                    items = o.getItems();
+
+                                    System.out.println("Order " + counter + ":");
+                                    for(Item i: items.keySet()){
+                                        System.out.println("Item: " + i.getItemName() + " | Quantity: " + items.get(i));
+                                    }
+
+                                    counter++;
+                                }
+                            }
+                        } else {
+                            System.out.println("Incorrect password. What would you like to do: ");
+                            System.out.println("[1] Try a different password");
+                            System.out.println("[2] Exit");
+                            customerInput = inputScanner.nextLine();
+
+                            if (customerInput.equals("1")) {
+                                validPassword = false;
+                            } else if (customerInput.equals("2")) {
+                                break outerloop;
+                            } else {
+                                System.out.println("Invalid input, please try again.");
+                            }
+                        }
+                    }
+                }
+            } else if (customerInput.equals("N")) {
+                System.out.println("You will not be able to view orders then. Exiting to main menu.");
+                validCustomerInput = true;
+            } else {
+                System.out.println("Invalid input. Please try again (case-sensitive).");
+            }
+        }
+    }
+
     public static ArrayList<Item> getItems(){
         return Items;
     }

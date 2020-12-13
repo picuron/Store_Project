@@ -22,6 +22,8 @@ public class StoreApplication {
         Items = FileRW.readItems();
         Customers = FileRW.readCustomers();
         Orders = FileRW.readOrders();
+        FileRW.readFinances();
+
         //Initalize objects to use and add to ArrayList- THIS IS TEMPORARY - will add File I/O and adding objects through merchant view
 //        Item i1 = new Item("Shirt", 3, 40, 15, "Soft, cotton");
 //        Item i2 = new Item("Hat", 10, 10, 5, "Baby blue, bucket-style");
@@ -35,7 +37,9 @@ public class StoreApplication {
 //        Items.add(i4);
 //        Items.add(i5);
 //
+//        FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), Finances.getTax());
 //        FileRW.writeItems(Items);
+
 
         //Prompts user to enter merchant view or customer view
         boolean isValidInput = false;

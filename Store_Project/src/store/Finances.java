@@ -1,6 +1,8 @@
 package store;
 
-public class Finances {
+import java.io.Serializable;
+
+public class Finances implements Serializable {
 
     // Changes in revenue and profit not supported yet
     private static double revenue;
@@ -9,8 +11,24 @@ public class Finances {
     private static double value;
     private static double tax;
 
-    public static void setTax(double setTaxTo){
-        tax = setTaxTo;
+    public static void setRevenue(double revenue){
+        Finances.revenue = revenue;
+    }
+
+    public static void setProfit(double profit) {
+        Finances.profit = profit;
+    }
+
+    public static void setCOG(double COG) {
+        Finances.COG = COG;
+    }
+
+    public static void setValue(double value) {
+        Finances.value = value;
+    }
+
+    public static void setTax(double tax){
+        Finances.tax = tax;
     }
 
     public static double getTax(){

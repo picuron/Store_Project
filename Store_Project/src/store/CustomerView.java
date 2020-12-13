@@ -63,13 +63,7 @@ public class CustomerView {
                             }
 
                         case 6:
-                            for(Customer c: Customers){
-                                System.out.println(c.getName());
-                            }
-                            for(Order c: Orders){
-                               System.out.println(c.getCustomer().getName());
-                               System.out.println(c.getItems());
-                            }
+                            FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), Finances.getTax());
                             break;
                     }
                 }
@@ -297,6 +291,7 @@ public class CustomerView {
         Orders.add(o);
         FileRW.writeOrder(Orders);
         FileRW.writeItems(Items);
+        //FileRW.writeFinances(Finances.class);
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Order Confirmed. Thank you for your order " + customer.getName() + "!");
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");

@@ -11,6 +11,7 @@ public class DirectoryInitilization {
         File InventoryDir = new File("Data/Inventory");
         File OrderDir = new File("Data/Order");
         File CustomerDir = new File("Data/Customer");
+        File FinanceDir = new File("Data/Finance");
 
         //If the /Data path doesn't exist, then make it, and add the other subdirectories
         if (!DataDir.exists()){
@@ -18,6 +19,7 @@ public class DirectoryInitilization {
                 InventoryDir.mkdir();
                 OrderDir.mkdir();
                 CustomerDir.mkdir();
+                FinanceDir.mkdir();
             }
             else{
                 System.out.println("Directory failed to be made.");
@@ -34,6 +36,10 @@ public class DirectoryInitilization {
 
         if(!CustomerDir.exists()){
             CustomerDir.mkdir();
+        }
+
+        if(!FinanceDir.exists()){
+            FinanceDir.mkdir();
         }
     }
 }

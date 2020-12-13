@@ -156,4 +156,84 @@ public class FileRW {
             System.out.println("Error initializing stream");
         }
     }
+
+    public static void readFinances(){
+        BufferedReader br = null;
+        FileReader fr = null;
+
+        try {
+            fr = new FileReader("Data/Finance/Finances.txt");
+            br = new BufferedReader(fr);
+
+            String line;
+            double lineDouble;
+            int counter = 0;
+            while((line = br.readLine()) != null){
+                lineDouble = Double.parseDouble(line);
+
+                if(counter == 0){
+                    Finances.setRevenue(lineDouble);
+                }
+                else if(counter == 1){
+                    Finances.setProfit(lineDouble);
+                }
+                else if(counter == 2){
+                    Finances.setCOG(lineDouble);
+                }
+                else if(counter == 3){
+                    Finances.setValue(lineDouble);
+                }
+                else if(counter == 4){
+                    Finances.setTax(lineDouble);
+                }
+            counter++;
+            }
+        }catch (IOException e) {
+            //
+        } finally {
+            try {
+                if (fr != null)
+                    br.close();
+
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                //
+            }
+        }
+    }
+
+    public static void writeFinances(double revenue, double profit, double COG, double value, double tax){
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try {
+            fw = new FileWriter("Data/Finance/Finances.txt");
+            bw = new BufferedWriter(fw);
+
+            bw.write(String.valueOf(revenue));
+            bw.newLine();
+            bw.write(String.valueOf(profit));
+            bw.newLine();
+            bw.write(String.valueOf(COG));
+            bw.newLine();
+            bw.write(String.valueOf(value));
+            bw.newLine();
+            bw.write(String.valueOf(tax));
+
+        } catch (IOException e) {
+            //
+        } finally {
+            try {
+                if (bw != null)
+                    bw.close();
+
+                if (fw != null)
+                    fw.close();
+            } catch (IOException ex) {
+                //
+            }
+        }
+    }
+
 }

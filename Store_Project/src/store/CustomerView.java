@@ -599,7 +599,8 @@ public class CustomerView {
                         }
                     }
                 }
-            } else if (customerInput.equals("N")) {
+            }
+            else if (customerInput.equals("N")) {
                 System.out.println("You will not be able to view orders then. Exiting to main menu.");
                 validCustomerInput = true;
             } else {

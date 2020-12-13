@@ -276,7 +276,6 @@ public class MerchantView {
             while (!validNewDescription) {
                 System.out.println("Add the item description");
                 newDescription = inputScanner.nextLine();
-                //newDescription = inputScanner.nextLine();
 
                 if(newDescription == null){
                     System.out.println("The description is invalid; try again!");

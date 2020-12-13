@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class Finances implements Serializable {
 
-    // Changes in revenue and profit not supported yet
     private static double revenue;
     private static double profit;
     private static double COG;

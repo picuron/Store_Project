@@ -6,57 +6,59 @@ import java.util.regex.*;
 public class MerchantView {
     private static ArrayList<Item> Items;
 
-    public static void Run(){
+    public static void Run() {
 
         Items = StoreApplication.getItems();
 //        System.out.println(CustomerView.getItems());
 
         Scanner inputScanner = new Scanner(System.in);
         boolean inProgress = true;
-        while(inProgress) {
+        while (inProgress) {
             boolean validMenuInput = false;
-            while(!validMenuInput){
+            while (!validMenuInput) {
                 System.out.println("[1] Stock [2] Finance [3] Orders (view only) [4] Analytics (view only) [5] Exit");
                 String userInput = inputScanner.nextLine();
 
-                int userInputFinal= 0;
+                int userInputFinal = 0;
 
-                try{
+                try {
                     userInputFinal = Integer.valueOf(userInput);
-                }
-                catch(NumberFormatException e){
+                } catch (NumberFormatException e) {
                     validMenuInput = false;
                 }
 
-                if(userInputFinal>0 && userInputFinal<7){
+                if (userInputFinal > 0 && userInputFinal < 7) {
                     switch (userInputFinal) {
                         case 1:
                             viewStock();
                             break;
                         case 2:
+                            viewFinances();
                             break;
                         case 3:
                             break;
                         case 4:
                             break;
                         case 5:
+                            FileRW.writeItems(Items);
+                            System.out.println("Bye!");
+                            System.exit(1);
                             break;
 
                     }
-                }
-                else{
+                } else {
                     System.out.println("Invalid input.");
                 }
             }
         }
     }
 
-    public static void viewStock(){
+    public static void viewStock() {
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Items in Stock:");
-        for(Item i: Items){
+        for (Item i : Items) {
             //Don't want to print out of stock items, so quantity must be greater than 0
-            if(i.getQuantity() > 0){
+            if (i.getQuantity() > 0) {
                 System.out.println("Item: " + i.getItemName() + " | Quantity: " + i.getQuantity() + " | Price: " + i.getListPrice() + " | COG: " + i.getCOG() + " | Description: " + i.getDescription());
             }
         }
@@ -66,7 +68,7 @@ public class MerchantView {
         System.out.println("[1] Edit stock [2] Exit");
         int userInput = inputScanner.nextInt();
 
-        switch(userInput){
+        switch (userInput) {
             case 1:
                 changeStock();
                 break;
@@ -75,12 +77,12 @@ public class MerchantView {
         }
     }
 
-    public static void changeStock(){
+    public static void changeStock() {
         Scanner inputScanner = new Scanner(System.in);
         System.out.println("[1] Edit/delete a specific item [2] Add a new item [3] Exit");
         int userInput = inputScanner.nextInt();
 
-        switch(userInput){
+        switch (userInput) {
             case 1:
                 editStock();
                 break;
@@ -92,7 +94,7 @@ public class MerchantView {
         }
     }
 
-    public static void editStock(){
+    public static void editStock() {
         Scanner inputScanner = new Scanner(System.in);
         int userInput = 0;
         String userStringInput = null;
@@ -102,18 +104,18 @@ public class MerchantView {
         boolean validQuantity = false;
         Item selectedItem = null;
 
-        while(!validName){
+        while (!validName) {
             System.out.println("Enter the name of the item you want to edit (case sensitive)");
             userStringInput = inputScanner.nextLine();
 
-            for(Item i: Items){
-                if (i.getItemName().equals(userStringInput)){
+            for (Item i : Items) {
+                if (i.getItemName().equals(userStringInput)) {
                     selectedItem = i;
                     validName = true;
                     break;
                 }
             }
-            if(validName == false){
+            if (validName == false) {
                 System.out.println("The provided item is invalid, please try again. Here are the items you can select:");
                 viewStock();
             }
@@ -122,7 +124,7 @@ public class MerchantView {
         System.out.println("What do you want to edit? [1] Item name [2] Quantity [3] Price [4] COG [5] Description [6] Delete");
         userInput = inputScanner.nextInt();
 
-        switch(userInput){
+        switch (userInput) {
             case 1:
                 editItemName(selectedItem);
                 FileRW.writeItems(Items);
@@ -149,7 +151,7 @@ public class MerchantView {
         }
     }
 
-    public static void editItemName(Item selectedItem){
+    public static void editItemName(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         int userInput = 0;
         String userStringInput = null;
@@ -160,7 +162,7 @@ public class MerchantView {
         viewStock();
     }
 
-    public static void editItemQuantity(Item selectedItem){
+    public static void editItemQuantity(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         int userInput = 0;
 
@@ -170,7 +172,7 @@ public class MerchantView {
         viewStock();
     }
 
-    public static void editItemPrice(Item selectedItem){
+    public static void editItemPrice(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         double userInput = 0;
 
@@ -180,7 +182,7 @@ public class MerchantView {
         viewStock();
     }
 
-    public static void editItemCOG(Item selectedItem){
+    public static void editItemCOG(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         double userInput = 0;
 
@@ -190,7 +192,7 @@ public class MerchantView {
         viewStock();
     }
 
-    public static void editItemDescription(Item selectedItem){
+    public static void editItemDescription(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         String userInput = null;
 
@@ -200,11 +202,11 @@ public class MerchantView {
         viewStock();
     }
 
-    public static void removeItem(Item selectedItem){
+    public static void removeItem(Item selectedItem) {
         selectedItem.setQuantity(0);
     }
 
-    public static void addStock(){
+    public static void addStock() {
         Scanner inputScanner = new Scanner(System.in);
         String newName = null;
         String newQuantity = null;
@@ -223,12 +225,12 @@ public class MerchantView {
         boolean validNewDescription = false;
         boolean entryComplete = false;
 
-        while (!entryComplete){
+        while (!entryComplete) {
             while (!validNewName) {
                 System.out.println("Add the item name");
                 newName = inputScanner.nextLine();
 
-                if(!(newName instanceof String)){
+                if (!(newName instanceof String)) {
                     System.out.println("The name is invalid; try again!");
                 } else {
                     validNewName = true;
@@ -240,7 +242,7 @@ public class MerchantView {
                 newQuantity = inputScanner.nextLine();
                 newQuantityInt = Integer.valueOf(newQuantity);
 
-                if(!(newQuantityInt == (newQuantityInt))){
+                if (!(newQuantityInt == (newQuantityInt))) {
                     System.out.println("The quantity is invalid; try again!");
                 } else {
                     validNewQuantity = true;
@@ -253,7 +255,7 @@ public class MerchantView {
                 newPriceDouble = Double.valueOf(newPrice);
                 stringVersion = String.valueOf(newPrice);
 
-                if(stringVersion.matches("[-+]?[0-9]*\\\\.?[0-9]+([eE][-+]?[0-9]+)?")){
+                if (stringVersion.matches("[-+]?[0-9]*\\\\.?[0-9]+([eE][-+]?[0-9]+)?")) {
                     System.out.println("The price is invalid; try again!");
                 } else {
                     validNewPrice = true;
@@ -266,7 +268,7 @@ public class MerchantView {
                 newCOGDouble = Double.valueOf(newCOG);
                 stringVersion = String.valueOf(newCOG);
 
-                if(stringVersion.matches("[-+]?[0-9]*\\\\.?[0-9]+([eE][-+]?[0-9]+)?")){
+                if (stringVersion.matches("[-+]?[0-9]*\\\\.?[0-9]+([eE][-+]?[0-9]+)?")) {
                     System.out.println("The COG is invalid; try again!");
                 } else {
                     validNewCOG = true;
@@ -278,18 +280,104 @@ public class MerchantView {
                 newDescription = inputScanner.nextLine();
                 //newDescription = inputScanner.nextLine();
 
-                if(newDescription == null){
+                if (newDescription == null) {
                     System.out.println("The description is invalid; try again!");
                 } else {
                     validNewDescription = true;
                 }
             }
 
-            if(validNewName && validNewQuantity && validNewPrice && validNewCOG && validNewDescription){
+            if (validNewName && validNewQuantity && validNewPrice && validNewCOG && validNewDescription) {
                 newItem = new Item(newName, newQuantityInt, newPriceDouble, newCOGDouble, newDescription);
                 Items.add(newItem);
                 FileRW.writeItems(Items);
                 entryComplete = true;
+            }
+        }
+    }
+
+    public static void viewFinances() {
+        Scanner inputScanner = new Scanner(System.in);
+
+        boolean validMenuInput = false;
+        while (!validMenuInput) {
+            System.out.println("[1] View Finance Data [2] Set Taxes [3] Exit");
+            String userInput = inputScanner.nextLine();
+
+            int userInputFinal = 0;
+
+            try {
+                userInputFinal = Integer.valueOf(userInput);
+            } catch (NumberFormatException e) {
+                validMenuInput = false;
+            }
+
+            if (userInputFinal > 0 && userInputFinal < 4) {
+                switch (userInputFinal) {
+                    case 1:
+                        double profitMargin = (Finances.getProfit() / Finances.getRevenue()) * 100;
+                        String formattedProfitMargin = String.format("%.2f", profitMargin);
+
+
+                        System.out.println("Store Finances:");
+                        System.out.println("Store Revenue: $" + Finances.getRevenue());
+                        System.out.println("Store Profit: $" + Finances.getProfit());
+                        System.out.println("Unsold Inventory Cost of Goods: $" + Finances.getCOG());
+                        System.out.println("Unsold Inventory Value: $" + Finances.getValue());
+
+                        if(Finances.getRevenue() == 0){
+                            System.out.println("Current profit margin: 0%");
+                        }
+                        else{
+                            System.out.println("Current profit margin: " + formattedProfitMargin + "%");
+                        }
+
+                        System.out.println("Current Tax Rate: " + Finances.getTax());
+
+                        Item mostPopular = null;
+                        int mostPopularValue = 0;
+                        for (Item i: Items){
+                            if(i.getNumSold() >= mostPopularValue){
+                                mostPopular = i;
+                            }
+                        }
+
+                        System.out.println("Most popular item is " + mostPopular.getItemName() + " with " + mostPopularValue + " units sold.");
+                        break;
+                    case 2:
+                        boolean validTax = false;
+                        String taxString;
+
+                        System.out.println("Store Finances:");
+                        while (!validTax){
+                            System.out.println("Enter the tax you'd like to set (Example: 0.13 for 13%): ");
+                            taxString = inputScanner.nextLine();
+
+                            double taxDouble = 0;
+
+                            try {
+                                taxDouble = Double.valueOf(taxString);
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid tax input. Please try again.");
+                                validTax = false;
+                            }
+
+                            if(taxDouble >= 0.00 && taxDouble <= 1.00) {
+                                System.out.println("Setting tax to " + taxDouble * 100 + "%");
+                                Finances.setTax(taxDouble);
+                                FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), taxDouble);
+                                validTax = true;
+                            } else {
+                                System.out.println("Invalid tax input. Please try again.");
+                                validTax = false;
+                            }
+                        }
+                        break;
+
+                    case 3:
+                        validMenuInput = true;
+                        break;
+                }
             }
         }
     }

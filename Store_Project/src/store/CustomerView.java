@@ -335,6 +335,11 @@ public class CustomerView {
             }
 
         }
+
+        for(Item i: cart.keySet()){
+            i.increaseNumSold(cart.get(i));
+        }
+
         Order o = new Order(customer, cart);
         Orders.add(o);
         FileRW.writeOrder(Orders);

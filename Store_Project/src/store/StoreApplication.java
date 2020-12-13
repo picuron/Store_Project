@@ -24,6 +24,11 @@ public class StoreApplication {
         Orders = FileRW.readOrders();
         FileRW.readFinances();
 
+        if(Items.isEmpty() && Customers.isEmpty() && Orders.isEmpty()){
+            System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println("It appears that your store is empty. Would you like to populate the store with data, or start from scratch? (Y/N)");
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
 
         //Initalize objects to use and add to ArrayList- THIS IS TEMPORARY - will add File I/O and adding objects through merchant view
 //        Item i1 = new Item("Shirt", 3, 40, 15, "Soft, cotton");

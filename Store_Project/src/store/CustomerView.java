@@ -87,15 +87,21 @@ public class CustomerView {
 
     //This will print all items in the inventory, if the quantity is greater than 0
     public static void printItemNames(){
-        System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        System.out.println("Items in Stock:");
-        for(Item i: Items){
-            //Don't want to print out of stock items, so quantity must be greater than 0
-            if(i.getQuantity() > 0){
-                System.out.println("Item: " + i.getItemName() + " | Quantity: " + i.getQuantity() + " | Price: " + i.getListPrice() + " | Description: " + i.getDescription());
-            }
+        if(Items.isEmpty()){
+            System.out.println("There is currently no items in the store.");
         }
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        else{
+            System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println("Items in Stock:");
+            for(Item i: Items){
+                //Don't want to print out of stock items, so quantity must be greater than 0
+                if(i.getQuantity() > 0){
+                    System.out.println("Item: " + i.getItemName() + " | Quantity: " + i.getQuantity() + " | Price: " + i.getListPrice() + " | Description: " + i.getDescription());
+                }
+            }
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
+
     }
 
     public static void addItemToCart(){
@@ -107,62 +113,66 @@ public class CustomerView {
         int quantityInt = -1;
         Item selectedItem = null;
 
-        //Doesn't continue until a valid item name is given
-        while(!validName){
-            System.out.println("Enter the name of the item to add to your cart (case sensitive)");
-            itemName = inputScanner.nextLine();
+        if(Items.isEmpty()){
+            System.out.println("There is currently no items in the store, so you can't buy anything.");
+        }
+        else{
+            //Doesn't continue until a valid item name is given
+            while(!validName){
+                System.out.println("Enter the name of the item to add to your cart (case sensitive)");
+                itemName = inputScanner.nextLine();
 
-            //Make shirt name is valid
-            for(Item i: Items){
-                if (i.getItemName().equals(itemName)){
-                    selectedItem = i;
-                    validName = true;
+                //Make shirt name is valid
+                for(Item i: Items){
+                    if (i.getItemName().equals(itemName)){
+                        selectedItem = i;
+                        validName = true;
+                    }
+                }
+                if(validName == false){
+                    System.out.println("The provided name is invalid, please try again. Here are the items you can select:");
+                    printItemNames();
                 }
             }
-            if(validName == false){
-                System.out.println("The provided name is invalid, please try again. Here are the items you can select:");
-                printItemNames();
-            }
-        }
 
-        while(!validQuantity){
-            System.out.println("How many of these would you like?");
-            String quantityString = inputScanner.nextLine();
-            quantityInt = Integer.valueOf(quantityString);
+            while(!validQuantity){
+                System.out.println("How many of these would you like?");
+                String quantityString = inputScanner.nextLine();
+                quantityInt = Integer.valueOf(quantityString);
 
-            //Error trap quantity
-            if(selectedItem.getQuantity() < quantityInt){
-                System.out.println("We do not have enough of these items in stock to provide you with that many! We have " + selectedItem.getQuantity() + " in stock of that item.");
-                System.out.println("Please enter a lower quantity.");
+                //Error trap quantity
+                if(selectedItem.getQuantity() < quantityInt){
+                    System.out.println("We do not have enough of these items in stock to provide you with that many! We have " + selectedItem.getQuantity() + " in stock of that item.");
+                    System.out.println("Please enter a lower quantity.");
+                }
+                else if (quantityInt < 1){
+                    System.out.println("Please enter a valid quantity, greater than 1");
+                }
+                else{
+                    validQuantity = true;
+                }
             }
-            else if (quantityInt < 1){
-                System.out.println("Please enter a valid quantity, greater than 1");
+
+            int cartQuantity = 0;
+            //Add item and quantity to hashmap
+            //If this returns null, that means the item is not in the cart, so we need to create a new record of it
+            if(cart.get(selectedItem) == null){
+                cart.put(selectedItem, quantityInt);
+                System.out.println("Added "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + " to cart.");
+                selectedItem.reduceQuantity(quantityInt);
+                listCart();
             }
+            //If the item is already in the cart, we will update the value
             else{
-                validQuantity = true;
+                cartQuantity = cart.get(selectedItem);
+                //Remove item from cart, so we can add with updated value
+                cart.remove(selectedItem);
+                cart.put(selectedItem, quantityInt + cartQuantity);
+                System.out.println("Updated cart to have "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + ".");
+                selectedItem.reduceQuantity(quantityInt + cartQuantity);
+                listCart();
             }
         }
-
-        int cartQuantity = 0;
-        //Add item and quantity to hashmap
-        //If this returns null, that means the item is not in the cart, so we need to create a new record of it
-        if(cart.get(selectedItem) == null){
-            cart.put(selectedItem, quantityInt);
-            System.out.println("Added "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + " to cart.");
-            selectedItem.reduceQuantity(quantityInt);
-            listCart();
-        }
-        //If the item is already in the cart, we will update the value
-        else{
-            cartQuantity = cart.get(selectedItem);
-            //Remove item from cart, so we can add with updated value
-            cart.remove(selectedItem);
-            cart.put(selectedItem, quantityInt + cartQuantity);
-            System.out.println("Updated cart to have "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + ".");
-            selectedItem.reduceQuantity(quantityInt + cartQuantity);
-            listCart();
-        }
-
     }
 
     public static void removeItemFromCart() {
@@ -174,54 +184,59 @@ public class CustomerView {
         int quantityInt = -1;
         Item selectedItem = null;
 
-        while(!validName){
-            System.out.println("Enter the name of the item to remove from your cart (case sensitive)");
-            itemName = inputScanner.nextLine();
-
-            //Make shirt name is valid
-            for(Item i: Items){
-                if (i.getItemName().equals(itemName)){
-                    selectedItem = i;
-                    validName = true;
-                }
-            }
-            if(validName == false){
-                System.out.println("The provided name is invalid, please try again. Here are the items you can select:");
-                printItemNames();
-            }
-        }
-
-        while(!validQuantity){
-            System.out.println("How many of these do you want to remove?");
-            String quantityString = inputScanner.nextLine();
-            quantityInt = Integer.valueOf(quantityString);
-
-            //Error trap quantity
-            if(quantityInt > cart.get(selectedItem)){
-                System.out.println("You're removing too many! You have " + cart.get(selectedItem) + " of that item in your cart.");
-                System.out.println("Please enter a lower quantity.");
-            }
-            else if (quantityInt < 1){
-                System.out.println("Please enter a valid quantity, greater than 1");
-            }
-            else{
-                validQuantity = true;
-            }
-        }
-
-        int cartQuantity = 0;
-        cartQuantity = cart.get(selectedItem);
-        //Remove item from cart, so we can add with updated value
-        cart.remove(selectedItem);
-        if(cartQuantity - quantityInt != 0){
-            cart.put(selectedItem, cartQuantity - quantityInt);
-            System.out.println("Updated cart to have "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + ".");
+        if(cart.isEmpty()){
+            System.out.println("Your cart is empty, so there is nothing to remove.");
         }
         else{
-            System.out.println("Removed " + selectedItem.getItemName() + " from your cart.");
+            while(!validName){
+                System.out.println("Enter the name of the item to remove from your cart (case sensitive)");
+                itemName = inputScanner.nextLine();
+
+                //Make shirt name is valid
+                for(Item i: Items){
+                    if (i.getItemName().equals(itemName)){
+                        selectedItem = i;
+                        validName = true;
+                    }
+                }
+                if(validName == false){
+                    System.out.println("The provided name is invalid, please try again. Here are the items you can select:");
+                    printItemNames();
+                }
+            }
+
+            while(!validQuantity){
+                System.out.println("How many of these do you want to remove?");
+                String quantityString = inputScanner.nextLine();
+                quantityInt = Integer.valueOf(quantityString);
+
+                //Error trap quantity
+                if(quantityInt > cart.get(selectedItem)){
+                    System.out.println("You're removing too many! You have " + cart.get(selectedItem) + " of that item in your cart.");
+                    System.out.println("Please enter a lower quantity.");
+                }
+                else if (quantityInt < 1){
+                    System.out.println("Please enter a valid quantity, greater than 1");
+                }
+                else{
+                    validQuantity = true;
+                }
+            }
+
+            int cartQuantity = 0;
+            cartQuantity = cart.get(selectedItem);
+            //Remove item from cart, so we can add with updated value
+            cart.remove(selectedItem);
+            if(cartQuantity - quantityInt != 0){
+                cart.put(selectedItem, cartQuantity - quantityInt);
+                System.out.println("Updated cart to have "+ cart.get(selectedItem) + " of " + selectedItem.getItemName() + ".");
+            }
+            else{
+                System.out.println("Removed " + selectedItem.getItemName() + " from your cart.");
+            }
+            selectedItem.increaseQuantity(quantityInt);
+            listCart();
         }
-        selectedItem.increaseQuantity(quantityInt);
-        listCart();
     }
 
     public static void listCart(){

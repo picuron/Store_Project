@@ -7,11 +7,13 @@ import java.util.regex.*;
 public class MerchantView {
     private static ArrayList<Item> Items;
     private static ArrayList<Order> Orders;
+    private static ArrayList<Customer> Customers;
 
     public static void Run() {
 
         Items = StoreApplication.getItems();
         Orders = StoreApplication.getOrders();
+        Customers = StoreApplication.getCustomers();
 //        System.out.println(CustomerView.getItems());
 
         Scanner inputScanner = new Scanner(System.in);
@@ -19,7 +21,7 @@ public class MerchantView {
         while (inProgress) {
             boolean validMenuInput = false;
             while (!validMenuInput) {
-                System.out.println("[1] Stock [2] Finance [3] Orders (view only) [4] Analytics (view only) [5] Exit");
+                System.out.println("[1] Stock [2] Finance [3] Orders (view only) [4] Customers (view only) [5] Exit");
                 String userInput = inputScanner.nextLine();
 
                 int userInputFinal = 0;
@@ -42,6 +44,7 @@ public class MerchantView {
                             viewOrders();
                             break;
                         case 4:
+                            viewCustomers();
                             break;
                         case 5:
                             FileRW.writeItems(Items);
@@ -388,18 +391,39 @@ public class MerchantView {
 
     public static void viewOrders(){
 
-        System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        int counter = 1;
-        for(Order o: Orders){
-            HashMap<Item, Integer> items = new HashMap<Item, Integer>();
-            items = o.getItems();
-
-            System.out.println("Order " + counter + ":");
-            for(Item i: items.keySet()){
-                System.out.println("Item: " + i.getItemName() + " | Quantity: " + items.get(i) + " | Customer: " + o.getCustomer().getName());
-            }
-            counter++;
+        if(Orders.isEmpty()){
+            System.out.println("You currently have no orders.");
         }
-        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        else{
+            System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            int counter = 1;
+            for(Order o: Orders){
+                HashMap<Item, Integer> items = new HashMap<Item, Integer>();
+                items = o.getItems();
+
+                System.out.println("Order " + counter + ":");
+                for(Item i: items.keySet()){
+                    System.out.println("Item: " + i.getItemName() + " | Quantity: " + items.get(i) + " | Customer: " + o.getCustomer().getName());
+                }
+                counter++;
+            }
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        }
+    }
+
+    public static void viewCustomers(){
+        if(Customers.isEmpty()){
+            System.out.println("You currently have no customers.");
+        }
+        else{
+            int counter = 1;
+            for(Customer c: Customers){
+                System.out.println("Customer #" + counter + ":");
+                System.out.println("Customer Name: " + c.getName() + " | Email: " + c.getEmail() + " | Phone Number: " + c.getPhoneNumber()
+                        + " | Address: " + c.getStreetName() + ", " + c.getCity() + ", " + c.getProvince() + ", " + c.getPostalCode()
+                        + " | Credit Card Number: " + c.getCreditCardNumber()  + " | Credit Card Expiry: " + c.getCreditCardExpiry()
+                        + " | Password: " + c.getPassword());
+            }
+        }
     }
 }

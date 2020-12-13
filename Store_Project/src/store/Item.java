@@ -36,7 +36,7 @@ public class Item implements Serializable {
     }
 
     public void reduceQuantity(int reduceBy){
-       if(this.quantity > reduceBy){
+       if(this.quantity >= reduceBy){
            this.quantity = this.quantity - reduceBy;
            Finances.reduceCOG(COG*reduceBy);
            Finances.reduceValue(listPrice*reduceBy);

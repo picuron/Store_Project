@@ -25,7 +25,7 @@ public class CustomerView {
         while(inProgress) {
             boolean validMenuInput = false;
             while(!validMenuInput){
-                System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] Exit program");
+                System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] View Past Orders [7] Exit program");
                 String userInput = inputScanner.nextLine();
 
                 int userInputFinal= 0;
@@ -37,7 +37,7 @@ public class CustomerView {
                     validMenuInput = false;
                 }
 
-                if(userInputFinal>0 && userInputFinal<7){
+                if(userInputFinal>0 && userInputFinal<8){
                     switch (userInputFinal) {
                         case 1:
                             printItemNames();
@@ -61,16 +61,21 @@ public class CustomerView {
                                 checkoutCart();
                                 break;
                             }
-
                         case 6:
+                            viewOrders();
+                            break;
+                        case 7:
                             System.out.println("Thank you for shopping with us!");
+                            //Put items in cart back in stock
+                            for(Item i: cart.keySet()){
+                                i.increaseQuantity(cart.get(i));
+                            }
                             //Ensure all changes are saved
                             FileRW.writeItems(Items);
                             FileRW.writeOrder(Orders);
                             FileRW.writeCustomer(Customers);
                             FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), Finances.getTax());
                             System.exit(1);
-
                     }
                 }
                 else{
@@ -220,7 +225,7 @@ public class CustomerView {
     }
 
     public static void listCart(){
-        double cartTotal = 0;
+        double cartTotal = 0.00;
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         if(cart.isEmpty()){
             System.out.println("Your cart is empty.");
@@ -230,8 +235,13 @@ public class CustomerView {
             for(Item i: cart.keySet()){
                 System.out.println("Item: " + i.getItemName() + " | Quantity: " + cart.get(i));
                 cartTotal = cartTotal + (i.getListPrice() * cart.get(i));
+//            }
             }
-            System.out.println("Cart total: $" + cartTotal);
+            String formattedSubtotal = String.format("%.2f", cartTotal);
+            String formattedTotal = String.format("%.2f", (cartTotal * (1+Finances.getTax())));
+
+            System.out.println("Cart subtotal: $" + formattedSubtotal);
+            System.out.println("Cart total: $" + formattedTotal);
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
@@ -244,6 +254,7 @@ public class CustomerView {
         boolean validInputNameNotFound = false;
         boolean validCustomerName = false;
 
+        outerloop:
         while(!validCustomerInput){
             System.out.println("Do you already have an account with us? (Y/N)");
             customerInput = inputScanner.nextLine();
@@ -260,6 +271,7 @@ public class CustomerView {
                     }
                 }
 
+                boolean validPassword = false;
                 if(validCustomerName == false){
                     while(validInputNameNotFound == false){
                         System.out.println("We couldn't find your name as an existing customer. What would you like to do: ");
@@ -278,6 +290,37 @@ public class CustomerView {
                         }
                         else{
                             System.out.println("Invalid input, please try again.");
+                        }
+                    }
+                }
+                else{
+                    System.out.println("Found you!");
+                    while(!validPassword){
+                        System.out.println("Please enter your password to confirm it's you: ");
+                        customerInput = inputScanner.nextLine();
+
+                        if(customer.getPassword().equals(customerInput)){
+                            System.out.println("Perfect, found you!");
+                            validPassword = true;
+                            break;
+                        }
+                        else{
+                            System.out.println("Incorrect password. What would you like to do: ");
+                            System.out.println("[1] Try a different password");
+                            System.out.println("[2] Create new account");
+                            customerInput = inputScanner.nextLine();
+
+                            if(customerInput.equals("1")){
+                                validPassword = false;
+                            }
+                            else if (customerInput.equals("2")){
+                                validCustomerInput = false;
+                                customer = createCustomer();
+                                break outerloop;
+                            }
+                            else{
+                                System.out.println("Invalid input, please try again.");
+                            }
                         }
                     }
                 }
@@ -316,6 +359,7 @@ public class CustomerView {
         String postalCode = null;
         String creditCardNumber = null;
         String creditCardExpirationDate = null;
+        String password = null;
         boolean validCustomerName = false;
         boolean validEmail = false;
         boolean validPhoneNumber = false;
@@ -325,18 +369,30 @@ public class CustomerView {
         boolean validPostalCode = false;
         boolean validCreditCardNumber = false;
         boolean validCreditCardExpirationDate = false;
+        boolean validPassword = false;
 
         // Validate name
         while (!validCustomerName){
+            boolean repeatFound = false;
+
             System.out.println("Enter your name");
             customerName = inputScanner.nextLine();
 
             Pattern p = Pattern.compile("([0-9])");
             Matcher m = p.matcher(customerName);
 
+            for(Customer c: Customers){
+                if(c.getName().equals(customerName)){
+                    repeatFound = true;
+                }
+            }
             if(m.find()){
                 System.out.println("Your name is invalid; please try again!");
-            } else {
+            }
+            else if(repeatFound == true){
+                System.out.println("It appears there is already an account in that name. Please use a different name.");
+            }
+            else {
                 validCustomerName = true;
             }
         }
@@ -403,10 +459,10 @@ public class CustomerView {
 
         // Validate postal code
         while (!validPostalCode){
-            System.out.println("Enter your postal code (example: 577533)");
+            System.out.println("Enter your postal code (example: K2K2N6)");
             postalCode = inputScanner.nextLine();
 
-            if (!postalCode.matches("\\d{6}")){
+            if (!postalCode.matches("^([A-Za-z]\\d[A-Za-z][-]?\\d[A-Za-z]\\d)")){
                 System.out.println("Your postal code is invalid; please try again!");
             } else {
                 validPostalCode = true;
@@ -415,7 +471,7 @@ public class CustomerView {
 
         // Validate credit card number
         while (!validCreditCardNumber){
-            System.out.println("Enter your credit card number");
+            System.out.println("Enter your credit card number (example: 1234567891234567)");
             creditCardNumber = inputScanner.nextLine();
 
             if (!creditCardNumber.matches("\\d{16}")){
@@ -427,7 +483,7 @@ public class CustomerView {
 
         // Validate credit card number
         while (!validCreditCardExpirationDate){
-            System.out.println("Enter your credit card expiration date");
+            System.out.println("Enter your credit card expiration date (example: 03/2021)");
             creditCardExpirationDate = inputScanner.nextLine();
 
             if (!creditCardExpirationDate.matches("(0[1-9]|10|11|12)/20[0-9]{2}$")){
@@ -437,13 +493,119 @@ public class CustomerView {
             }
         }
 
-        Customer c = new Customer(customerName, email, phoneNumber, streetName, city, province, postalCode, creditCardNumber, creditCardExpirationDate);
+        // Validate password
+        while (!validPassword){
+            System.out.println("Enter a password");
+            password = inputScanner.nextLine();
+
+            if (password == ""){
+                System.out.println("Your password is invalid; please try again!");
+            } else {
+                validPassword = true;
+            }
+        }
+
+        Customer c = new Customer(customerName, email, phoneNumber, streetName, city, province, postalCode, creditCardNumber, creditCardExpirationDate, password);
         Customers.add(c);
         FileRW.writeCustomer(Customers);
         System.out.println("We have your information saved! Email: " + email + " | Phone number: " + phoneNumber);
         System.out.println("Address: " + streetName + ", " + city + ", " + province + ", " + postalCode);
 
         return c;
+    }
+
+    public static void viewOrders(){
+        Scanner inputScanner = new Scanner(System.in);
+        String customerInput;
+        Customer customer = null;
+        boolean validCustomerInput = false;
+        boolean validInputNameNotFound = false;
+        boolean validCustomerName = false;
+
+        outerloop:
+        while(!validCustomerInput) {
+            System.out.println("You need an account to view orders. Do you already have an account with us? (Y/N)");
+            customerInput = inputScanner.nextLine();
+
+            if (customerInput.equals("Y")) {
+                System.out.println("Great, please enter your full name");
+                customerInput = inputScanner.nextLine();
+
+                for (Customer c : Customers) {
+                    if (c.getName().equals(customerInput)) {
+                        customer = c;
+                        validCustomerInput = true;
+                        validCustomerName = true;
+                    }
+                }
+
+                boolean validPassword = false;
+                if (validCustomerName == false) {
+                    while (validInputNameNotFound == false) {
+                        System.out.println("We couldn't find your name as an existing customer. What would you like to do: ");
+                        System.out.println("[1] Try again");
+                        System.out.println("[2] Exit");
+                        customerInput = inputScanner.nextLine();
+
+                        if (customerInput.equals("1")) {
+                            validCustomerInput = false;
+                            break;
+                        } else if (customerInput.equals("2")) {
+                            validCustomerInput = true;
+                            break;
+                        } else {
+                            System.out.println("Invalid input, please try again.");
+                        }
+                    }
+                } else {
+                    System.out.println("Found you!");
+                    while (!validPassword) {
+                        System.out.println("Please enter your password to confirm it's you: ");
+                        customerInput = inputScanner.nextLine();
+
+                        if (customer.getPassword().equals(customerInput)) {
+                            System.out.println("Perfect, found you! Here are your orders: ");
+
+                            int counter = 1;
+                            System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                            for(Order o: Orders){
+                                validPassword = true;
+                                if(o.getCustomer().getName().equals(customer.getName()) && o.getCustomer().getPassword().equals(customer.getPassword())){
+                                    HashMap<Item, Integer> items = new HashMap<Item, Integer>();
+                                    items = o.getItems();
+
+                                    System.out.println("Order " + counter + ":");
+                                    for(Item i: items.keySet()){
+                                        System.out.println("Item: " + i.getItemName() + " | Quantity: " + items.get(i));
+                                    }
+
+                                    counter++;
+                                }
+                            }
+                            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        } else {
+                            System.out.println("Incorrect password. What would you like to do: ");
+                            System.out.println("[1] Try a different password");
+                            System.out.println("[2] Exit");
+                            customerInput = inputScanner.nextLine();
+
+                            if (customerInput.equals("1")) {
+                                validPassword = false;
+                            } else if (customerInput.equals("2")) {
+                                break outerloop;
+                            } else {
+                                System.out.println("Invalid input, please try again.");
+                            }
+                        }
+                    }
+                }
+            } else if (customerInput.equals("N")) {
+                System.out.println("You will not be able to view orders then. Exiting to main menu.");
+                validCustomerInput = true;
+            } else {
+                System.out.println("Invalid input. Please try again (case-sensitive).");
+            }
+        }
     }
 
     public static ArrayList<Item> getItems(){

@@ -284,6 +284,7 @@ public class MerchantView {
                 }
             }
 
+            
             if(validNewName && validNewQuantity && validNewPrice && validNewCOG && validNewDescription){
                 newItem = new Item(newName, newQuantityInt, newPriceDouble, newCOGDouble, newDescription);
                 Items.add(newItem);

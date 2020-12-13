@@ -442,10 +442,10 @@ public class CustomerView {
 
         // Validate postal code
         while (!validPostalCode){
-            System.out.println("Enter your postal code (example: 577533)");
+            System.out.println("Enter your postal code (example: K2K2N6)");
             postalCode = inputScanner.nextLine();
 
-            if (!postalCode.matches("\\d{6}")){
+            if (!postalCode.matches("^([A-Za-z]\\d[A-Za-z][-]?\\d[A-Za-z]\\d)")){
                 System.out.println("Your postal code is invalid; please try again!");
             } else {
                 validPostalCode = true;
@@ -454,7 +454,7 @@ public class CustomerView {
 
         // Validate credit card number
         while (!validCreditCardNumber){
-            System.out.println("Enter your credit card number");
+            System.out.println("Enter your credit card number (example: 1234567891234567)");
             creditCardNumber = inputScanner.nextLine();
 
             if (!creditCardNumber.matches("\\d{16}")){
@@ -466,7 +466,7 @@ public class CustomerView {
 
         // Validate credit card number
         while (!validCreditCardExpirationDate){
-            System.out.println("Enter your credit card expiration date");
+            System.out.println("Enter your credit card expiration date (example: 03/2021)");
             creditCardExpirationDate = inputScanner.nextLine();
 
             if (!creditCardExpirationDate.matches("(0[1-9]|10|11|12)/20[0-9]{2}$")){
@@ -547,9 +547,10 @@ public class CustomerView {
                         customerInput = inputScanner.nextLine();
 
                         if (customer.getPassword().equals(customerInput)) {
-                            System.out.println("Perfect, found you!");
+                            System.out.println("Perfect, found you! Here are your orders: ");
 
                             int counter = 1;
+                            System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                             for(Order o: Orders){
                                 validPassword = true;
                                 if(o.getCustomer().getName().equals(customer.getName()) && o.getCustomer().getPassword().equals(customer.getPassword())){
@@ -564,6 +565,7 @@ public class CustomerView {
                                     counter++;
                                 }
                             }
+                            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         } else {
                             System.out.println("Incorrect password. What would you like to do: ");
                             System.out.println("[1] Try a different password");

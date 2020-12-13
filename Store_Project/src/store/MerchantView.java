@@ -66,7 +66,7 @@ public class MerchantView {
         for (Item i : Items) {
             //Don't want to print out of stock items, so quantity must be greater than 0
             if (i.getQuantity() > 0) {
-                System.out.println("Item: " + i.getItemName() + " | Quantity: " + i.getQuantity() + " | Price: " + i.getListPrice() + " | COG: " + i.getCOG() + " | Description: " + i.getDescription());
+                System.out.println("Item: " + i.getItemName() + " | Quantity: " + i.getQuantity() + " | Price: " + i.getListPrice() + " | COG: " + i.getCOG() + " | Description: " + i.getDescription() + " | Number Sold: " + i.getNumSold());
             }
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -322,7 +322,7 @@ public class MerchantView {
             if (userInputFinal > 0 && userInputFinal < 4) {
                 switch (userInputFinal) {
                     case 1:
-                        double profitMargin = (Finances.getProfit() / Finances.getRevenue()) * 100;
+                        double profitMargin = ((Finances.getRevenue() - (Finances.getRevenue()-Finances.getProfit()))/Finances.getRevenue()) * 100;
                         String formattedProfitMargin = String.format("%.2f", profitMargin);
 
 
@@ -342,9 +342,10 @@ public class MerchantView {
                         System.out.println("Current Tax Rate: " + Finances.getTax());
 
                         Item mostPopular = null;
-                        int mostPopularValue = 0;
+                        int mostPopularValue = -1;
                         for (Item i: Items){
                             if(i.getNumSold() >= mostPopularValue){
+                                mostPopularValue = i.getNumSold();
                                 mostPopular = i;
                             }
                         }
@@ -423,6 +424,7 @@ public class MerchantView {
                         + " | Address: " + c.getStreetName() + ", " + c.getCity() + ", " + c.getProvince() + ", " + c.getPostalCode()
                         + " | Credit Card Number: " + c.getCreditCardNumber()  + " | Credit Card Expiry: " + c.getCreditCardExpiry()
                         + " | Password: " + c.getPassword());
+                counter++;
             }
         }
     }

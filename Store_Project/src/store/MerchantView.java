@@ -1,14 +1,17 @@
 package store;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.regex.*;
 
 public class MerchantView {
     private static ArrayList<Item> Items;
+    private static ArrayList<Order> Orders;
 
     public static void Run() {
 
         Items = StoreApplication.getItems();
+        Orders = StoreApplication.getOrders();
 //        System.out.println(CustomerView.getItems());
 
         Scanner inputScanner = new Scanner(System.in);
@@ -36,6 +39,7 @@ public class MerchantView {
                             viewFinances();
                             break;
                         case 3:
+                            viewOrders();
                             break;
                         case 4:
                             break;
@@ -380,5 +384,22 @@ public class MerchantView {
                 }
             }
         }
+    }
+
+    public static void viewOrders(){
+
+        System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        int counter = 1;
+        for(Order o: Orders){
+            HashMap<Item, Integer> items = new HashMap<Item, Integer>();
+            items = o.getItems();
+
+            System.out.println("Order " + counter + ":");
+            for(Item i: items.keySet()){
+                System.out.println("Item: " + i.getItemName() + " | Quantity: " + items.get(i) + " | Customer: " + o.getCustomer().getName());
+            }
+            counter++;
+        }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
 }

@@ -25,7 +25,7 @@ public class CustomerView {
         while(inProgress) {
             boolean validMenuInput = false;
             while(!validMenuInput){
-                System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] Exit");
+                System.out.println("[1] View items [2] Add Item to Cart [3] Remove item from cart [4] View cart [5] Checkout [6] Exit program");
                 String userInput = inputScanner.nextLine();
 
                 int userInputFinal= 0;
@@ -63,8 +63,14 @@ public class CustomerView {
                             }
 
                         case 6:
+                            System.out.println("Thank you for shopping with us!");
+                            //Ensure all changes are saved
+                            FileRW.writeItems(Items);
+                            FileRW.writeOrder(Orders);
+                            FileRW.writeCustomer(Customers);
                             FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), Finances.getTax());
-                            break;
+                            System.exit(1);
+
                     }
                 }
                 else{

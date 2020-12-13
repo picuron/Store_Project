@@ -230,7 +230,6 @@ public class CustomerView {
             for(Item i: cart.keySet()){
                 System.out.println("Item: " + i.getItemName() + " | Quantity: " + cart.get(i));
                 cartTotal = cartTotal + (i.getListPrice() * cart.get(i));
-//            }
             }
             System.out.println("Cart total: $" + cartTotal);
         }
@@ -446,6 +445,7 @@ public class CustomerView {
 
         return c;
     }
+
     public static ArrayList<Item> getItems(){
         return Items;
     }

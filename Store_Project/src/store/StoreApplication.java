@@ -24,6 +24,7 @@ public class StoreApplication {
         Orders = FileRW.readOrders();
         FileRW.readFinances();
 
+//        System.out.println(Items);
         //Initalize objects to use and add to ArrayList- THIS IS TEMPORARY - will add File I/O and adding objects through merchant view
 //        Item i1 = new Item("Shirt", 3, 40, 15, "Soft, cotton");
 //        Item i2 = new Item("Hat", 10, 10, 5, "Baby blue, bucket-style");

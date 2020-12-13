@@ -37,7 +37,7 @@ public class CustomerView {
                     validMenuInput = false;
                 }
 
-                if(userInputFinal>0 && userInputFinal<7){
+                if(userInputFinal>0 && userInputFinal<8){
                     switch (userInputFinal) {
                         case 1:
                             printItemNames();
@@ -66,6 +66,10 @@ public class CustomerView {
                             break;
                         case 7:
                             System.out.println("Thank you for shopping with us!");
+                            //Put items in cart back in stock
+                            for(Item i: cart.keySet()){
+                                i.increaseQuantity(cart.get(i));
+                            }
                             //Ensure all changes are saved
                             FileRW.writeItems(Items);
                             FileRW.writeOrder(Orders);
@@ -233,9 +237,11 @@ public class CustomerView {
                 cartTotal = cartTotal + (i.getListPrice() * cart.get(i));
 //            }
             }
-            double tax = Finances.getTax();
-            System.out.println("Cart subtotal: $" + cartTotal);
-            System.out.println("Cart total: $" + (cartTotal * (1+Finances.getTax())));
+            String formattedSubtotal = String.format("%.2f", cartTotal);
+            String formattedTotal = String.format("%.2f", (cartTotal * (1+Finances.getTax())));
+
+            System.out.println("Cart subtotal: $" + formattedSubtotal);
+            System.out.println("Cart total: $" + formattedTotal);
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
@@ -367,15 +373,26 @@ public class CustomerView {
 
         // Validate name
         while (!validCustomerName){
+            boolean repeatFound = false;
+
             System.out.println("Enter your name");
             customerName = inputScanner.nextLine();
 
             Pattern p = Pattern.compile("([0-9])");
             Matcher m = p.matcher(customerName);
 
+            for(Customer c: Customers){
+                if(c.getName().equals(customerName)){
+                    repeatFound = true;
+                }
+            }
             if(m.find()){
                 System.out.println("Your name is invalid; please try again!");
-            } else {
+            }
+            else if(repeatFound == true){
+                System.out.println("It appears there is already an account in that name. Please use a different name.");
+            }
+            else {
                 validCustomerName = true;
             }
         }

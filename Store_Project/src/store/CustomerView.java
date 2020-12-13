@@ -220,7 +220,7 @@ public class CustomerView {
     }
 
     public static void listCart(){
-        double cartTotal = 0;
+        double cartTotal = 0.00;
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         if(cart.isEmpty()){
             System.out.println("Your cart is empty.");
@@ -232,7 +232,9 @@ public class CustomerView {
                 cartTotal = cartTotal + (i.getListPrice() * cart.get(i));
 //            }
             }
-            System.out.println("Cart total: $" + cartTotal);
+            double tax = Finances.getTax();
+            System.out.println("Cart subtotal: $" + cartTotal);
+            System.out.println("Cart total: $" + (cartTotal * (1+Finances.getTax())));
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
@@ -244,7 +246,9 @@ public class CustomerView {
         boolean validCustomerInput = false;
         boolean validInputNameNotFound = false;
         boolean validCustomerName = false;
+        boolean madeAccount = false;
 
+        outerloop:
         while(!validCustomerInput){
             System.out.println("Do you already have an account with us? (Y/N)");
             customerInput = inputScanner.nextLine();
@@ -261,6 +265,7 @@ public class CustomerView {
                     }
                 }
 
+                boolean validPassword = false;
                 if(validCustomerName == false){
                     while(validInputNameNotFound == false){
                         System.out.println("We couldn't find your name as an existing customer. What would you like to do: ");
@@ -279,6 +284,37 @@ public class CustomerView {
                         }
                         else{
                             System.out.println("Invalid input, please try again.");
+                        }
+                    }
+                }
+                else{
+                    System.out.println("Found you!");
+                    while(!validPassword){
+                        System.out.println("Please enter your password to confirm it's you: ");
+                        customerInput = inputScanner.nextLine();
+
+                        if(customer.getPassword().equals(customerInput)){
+                            System.out.println("Perfect, found you!");
+                            validPassword = true;
+                            break;
+                        }
+                        else{
+                            System.out.println("Incorrect password. What would you like to do: ");
+                            System.out.println("[1] Try a different password");
+                            System.out.println("[2] Create new account");
+                            customerInput = inputScanner.nextLine();
+
+                            if(customerInput.equals("1")){
+                                validPassword = false;
+                            }
+                            else if (customerInput.equals("2")){
+                                validCustomerInput = false;
+                                customer = createCustomer();
+                                break outerloop;
+                            }
+                            else{
+                                System.out.println("Invalid input, please try again.");
+                            }
                         }
                     }
                 }
@@ -317,6 +353,7 @@ public class CustomerView {
         String postalCode = null;
         String creditCardNumber = null;
         String creditCardExpirationDate = null;
+        String password = null;
         boolean validCustomerName = false;
         boolean validEmail = false;
         boolean validPhoneNumber = false;
@@ -326,6 +363,7 @@ public class CustomerView {
         boolean validPostalCode = false;
         boolean validCreditCardNumber = false;
         boolean validCreditCardExpirationDate = false;
+        boolean validPassword = false;
 
         // Validate name
         while (!validCustomerName){
@@ -438,7 +476,19 @@ public class CustomerView {
             }
         }
 
-        Customer c = new Customer(customerName, email, phoneNumber, streetName, city, province, postalCode, creditCardNumber, creditCardExpirationDate);
+        // Validate password
+        while (!validPassword){
+            System.out.println("Enter a password");
+            password = inputScanner.nextLine();
+
+            if (password == ""){
+                System.out.println("Your password is invalid; please try again!");
+            } else {
+                validPassword = true;
+            }
+        }
+
+        Customer c = new Customer(customerName, email, phoneNumber, streetName, city, province, postalCode, creditCardNumber, creditCardExpirationDate, password);
         Customers.add(c);
         FileRW.writeCustomer(Customers);
         System.out.println("We have your information saved! Email: " + email + " | Phone number: " + phoneNumber);

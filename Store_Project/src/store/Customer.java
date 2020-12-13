@@ -12,10 +12,11 @@ public class Customer implements Serializable {
     private String postalCode;
     private String creditCardNumber;
     private String creditCardExpiry;
+    private String password;
 
     // For now, customer attributes can't be changed on customer side. We should try to add support for this.
     public Customer(String name, String email, String phoneNumber, String streetName, String city, String province,
-                    String postalCode, String creditCardNumber, String creditCardExpiry) {
+                    String postalCode, String creditCardNumber, String creditCardExpiry, String password) {
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
@@ -25,6 +26,7 @@ public class Customer implements Serializable {
         this.postalCode = postalCode;
         this.creditCardNumber = creditCardNumber;
         this.creditCardExpiry = creditCardExpiry;
+        this.password = password;
     }
 
     public String getName() {
@@ -79,6 +81,9 @@ public class Customer implements Serializable {
         return postalCode;
     }
 
+    public String getPassword(){
+        return password;
+    }
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }

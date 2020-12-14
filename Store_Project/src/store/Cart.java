@@ -11,36 +11,5 @@ public class Cart {
         this.items = items;
         this.subTotal = subTotal;
         this.order = order;
-
-
-//        order.setItems();
     }
-
-
-
-
-//    public int getOrderID() {
-//        return orderID;
-//    }
-//
-//    public void setOrderID(int orderID) {
-//        this.orderID = orderID;
-//    }
-//
-//    public int getCustomerID() {
-//        return customerID;
-//    }
-//
-//    public void setCustomerID(int customerID) {
-//        this.customerID = customerID;
-//    }
-//
-//    public Item[] getItems() {
-//        return items;
-//    }
-//
-//    public void setItems(Item[] items) {
-//        this.items = items;
-//    }
-//}
 }

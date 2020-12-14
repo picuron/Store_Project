@@ -1,14 +1,12 @@
 package store;
-
 import java.io.*;
 import java.util.ArrayList;
 
 public class FileRW {
-
     public static ArrayList<Item> readItems(){
         ArrayList<Item> Items = new ArrayList<Item>();
-        try {
 
+        try {
             FileInputStream fi = new FileInputStream(new File("Data/Inventory/Items.txt"));
             ObjectInputStream oi = new ObjectInputStream(fi);
 
@@ -19,7 +17,6 @@ public class FileRW {
                     Items.add(i);
                 }
             }catch (EOFException e){
-                //EOF
             }
 
             oi.close();
@@ -28,7 +25,6 @@ public class FileRW {
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         } catch (IOException e) {
-            //EOF or Empty File
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -49,26 +45,24 @@ public class FileRW {
             f.close();
         }catch (FileNotFoundException e) {
             System.out.println("File not found");
-        } catch (IOException e) {
+        }catch (IOException e) {
             System.out.println("Error initializing stream");
         }
     }
 
     public static ArrayList<Customer> readCustomers(){
         ArrayList<Customer> Customers = new ArrayList<Customer>();
-        try {
 
+        try {
             FileInputStream fi = new FileInputStream(new File("Data/Customer/Customers.txt"));
             ObjectInputStream oi = new ObjectInputStream(fi);
 
-            // Read objects
             try{
                 for(;;){
                     Customer c = (Customer) oi.readObject();
                     Customers.add(c);
                 }
             }catch (EOFException e){
-                //EOF
             }
 
             oi.close();
@@ -76,11 +70,8 @@ public class FileRW {
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
-        }
-        catch (IOException e) {
-           //EOF or Empty File
-        }
-        catch (ClassNotFoundException e) {
+        }catch (IOException e) {
+        }catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return Customers;
@@ -95,10 +86,10 @@ public class FileRW {
             for(Customer c: Customers){
                 o.writeObject(c);
             }
-            // Write objects to file
 
             o.close();
             f.close();
+
         }catch (FileNotFoundException e) {
             System.out.println("File not found");
         } catch (IOException e) {
@@ -113,14 +104,12 @@ public class FileRW {
             FileInputStream fi = new FileInputStream(new File("Data/Order/Orders.txt"));
             ObjectInputStream oi = new ObjectInputStream(fi);
 
-            // Read objects
             try{
                 for(;;){
                     Order o = (Order) oi.readObject();
                     Orders.add(o);
                 }
             }catch (EOFException e){
-                //EOF
             }
 
             oi.close();
@@ -129,7 +118,6 @@ public class FileRW {
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         } catch (IOException e) {
-            //EOF or Empty File
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -145,7 +133,6 @@ public class FileRW {
             for(Order c: Orders){
                 o.writeObject(c);
             }
-            // Write objects to file
 
             o.close();
             f.close();
@@ -172,32 +159,25 @@ public class FileRW {
 
                 if(counter == 0){
                     Finances.setRevenue(lineDouble);
-                }
-                else if(counter == 1){
+                }else if(counter == 1){
                     Finances.setProfit(lineDouble);
-                }
-                else if(counter == 2){
+                }else if(counter == 2){
                     Finances.setCOG(lineDouble);
-                }
-                else if(counter == 3){
+                }else if(counter == 3){
                     Finances.setValue(lineDouble);
-                }
-                else if(counter == 4){
+                }else if(counter == 4){
                     Finances.setTax(lineDouble);
                 }
             counter++;
             }
         }catch (IOException e) {
-            //
         } finally {
             try {
                 if (fr != null)
                     br.close();
-
                 if (fr != null)
                     fr.close();
             } catch (IOException ex) {
-                //
             }
         }
     }
@@ -209,7 +189,6 @@ public class FileRW {
         try {
             fw = new FileWriter("Data/Finance/Finances.txt");
             bw = new BufferedWriter(fw);
-
             bw.write(String.valueOf(revenue));
             bw.newLine();
             bw.write(String.valueOf(profit));
@@ -221,18 +200,14 @@ public class FileRW {
             bw.write(String.valueOf(tax));
 
         } catch (IOException e) {
-            //
         } finally {
             try {
                 if (bw != null)
                     bw.close();
-
                 if (fw != null)
                     fw.close();
             } catch (IOException ex) {
-                //
             }
         }
     }
-
 }

@@ -14,7 +14,6 @@ public class MerchantView {
         Items = StoreApplication.getItems();
         Orders = StoreApplication.getOrders();
         Customers = StoreApplication.getCustomers();
-//        System.out.println(CustomerView.getItems());
 
         Scanner inputScanner = new Scanner(System.in);
         boolean inProgress = true;
@@ -64,7 +63,6 @@ public class MerchantView {
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Items in Stock:");
         for (Item i : Items) {
-            //Don't want to print out of stock items, so quantity must be greater than 0
             if (i.getQuantity() > 0) {
                 System.out.println("Item: " + i.getItemName() + " | Quantity: " + i.getQuantity() + " | Price: " + i.getListPrice() + " | COG: " + i.getCOG() + " | Description: " + i.getDescription() + " | Number Sold: " + i.getNumSold());
             }
@@ -106,9 +104,7 @@ public class MerchantView {
         int userInput = 0;
         String userStringInput = null;
 
-
         boolean validName = false;
-        boolean validQuantity = false;
         Item selectedItem = null;
 
         while (!validName) {
@@ -160,7 +156,6 @@ public class MerchantView {
 
     public static void editItemName(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
-        int userInput = 0;
         String userStringInput = null;
 
         System.out.println("Enter the new name of " + selectedItem.getItemName());
@@ -285,7 +280,6 @@ public class MerchantView {
             while (!validNewDescription) {
                 System.out.println("Add the item description");
                 newDescription = inputScanner.nextLine();
-                //newDescription = inputScanner.nextLine();
 
                 if (newDescription == null) {
                     System.out.println("The description is invalid; try again!");
@@ -310,7 +304,6 @@ public class MerchantView {
         while (!validMenuInput) {
             System.out.println("[1] View Finance Data [2] Set Taxes [3] Exit");
             String userInput = inputScanner.nextLine();
-
             int userInputFinal = 0;
 
             try {
@@ -325,7 +318,6 @@ public class MerchantView {
                         double profitMargin = ((Finances.getRevenue() - (Finances.getRevenue()-Finances.getProfit()))/Finances.getRevenue()) * 100;
                         String formattedProfitMargin = String.format("%.2f", profitMargin);
 
-
                         System.out.println("Store Finances:");
                         System.out.println("Store Revenue: $" + Finances.getRevenue());
                         System.out.println("Store Profit: $" + Finances.getProfit());
@@ -334,13 +326,11 @@ public class MerchantView {
 
                         if(Finances.getRevenue() == 0){
                             System.out.println("Current profit margin: 0%");
-                        }
-                        else{
+                        }else{
                             System.out.println("Current profit margin: " + formattedProfitMargin + "%");
                         }
 
                         System.out.println("Current Tax Rate: " + Finances.getTax());
-
                         Item mostPopular = null;
                         int mostPopularValue = -1;
                         for (Item i: Items){
@@ -360,7 +350,6 @@ public class MerchantView {
                         while (!validTax){
                             System.out.println("Enter the tax you'd like to set (Example: 0.13 for 13%): ");
                             taxString = inputScanner.nextLine();
-
                             double taxDouble = 0;
 
                             try {

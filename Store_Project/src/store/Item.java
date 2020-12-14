@@ -1,19 +1,14 @@
 package store;
-
 import java.io.*;
 
-//Currently assuming that the only aspects of an item that can change is quantity and listPrice, assuming COG
-//won't change
 public class Item implements Serializable {
 
-    //Implement item Category
     private String itemName;
     private int quantity;
     private double listPrice;
     private double COG;
     private String description;
     private int numSold;
-
 
     public Item(String name, int quantity, double listPrice, double COG, String description){
         this.itemName = name;
@@ -30,7 +25,6 @@ public class Item implements Serializable {
     public int getNumSold(){
         return numSold;
     }
-
     public void increaseNumSold(int increaseBy){
         this.numSold = this.numSold + increaseBy;
     }
@@ -40,8 +34,7 @@ public class Item implements Serializable {
            this.quantity = this.quantity - reduceBy;
            Finances.reduceCOG(COG*reduceBy);
            Finances.reduceValue(listPrice*reduceBy);
-       }
-       else{
+       }else{
            System.out.println("Cannot reduce into negative number");
        }
     }
@@ -52,21 +45,12 @@ public class Item implements Serializable {
         Finances.addValue(listPrice*increaseBy);
     }
 
-    public void changeListPrice(double newPrice){
-        Finances.reduceValue(listPrice*quantity);
-        Finances.addValue((newPrice*quantity));
-
-        if (newPrice < 0) { System.out.println("Cannot reduce price into negative number"); }
-    }
-
     public void setItemName(String name){
         this.itemName = name;
     }
-
     public String getItemName(){
         return itemName;
     }
-
     public int getQuantity() {
         return quantity;
     }
@@ -82,28 +66,19 @@ public class Item implements Serializable {
     public double getListPrice() {
         return listPrice;
     }
-
     public void setListPrice(double listPrice) {
         this.listPrice = listPrice;
     }
-
     public double getCOG() {
         return COG;
     }
-
     public void setCOG(double COG) {
         this.COG = COG;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void updateCustomerItems(Item selectedItem) {
-
     }
 }

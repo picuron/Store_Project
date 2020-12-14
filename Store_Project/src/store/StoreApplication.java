@@ -1,5 +1,4 @@
 package store;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,16 +13,13 @@ public class StoreApplication {
     public static void main(String[] args){
 
         DirectoryInitilization.Setup();
-
         Items = new ArrayList<Item>();
         Customers = new ArrayList<Customer>();
         Orders = new ArrayList<Order>();
-
         Items = FileRW.readItems();
         Customers = FileRW.readCustomers();
         Orders = FileRW.readOrders();
         FileRW.readFinances();
-
         boolean validInput = false;
         String customerInput = null;
         Scanner inputScanner = new Scanner(System.in);
@@ -57,21 +53,17 @@ public class StoreApplication {
             System.out.println("Which view would like to enter in?");
             System.out.println("[1] - Merchant View");
             System.out.println("[2] - Customer View");
-
-
             String inputString = userInput.nextLine();
+
             try{
                 int inputInt = Integer.valueOf(inputString);
-
                 if(inputInt == 1){
                     MerchantView.Run();
                     isValidInput = true;
-                }
-                else if(inputInt == 2){
+                }else if(inputInt == 2){
                     CustomerView.Run();
                     isValidInput = true;
-                }
-                else{
+                }else{
                     System.out.println("Invalid input. Please try again:");
                 }
             }
@@ -80,12 +72,10 @@ public class StoreApplication {
                 System.out.println("Invalid input. Please try again.");
             }
         }
-
     }
 
     public static void seedStoreData(){
         Finances.setTax(0.13);
-
         Item i1 = new Item("Shirt", 30, 40, 15, "Soft, cotton");
         Item i2 = new Item("Hat", 10, 10, 5, "Baby blue, bucket-style");
         Item i3 = new Item("Baby Toy", 15, 30, 20, "Fun to play with, fun to eat!");
@@ -94,7 +84,6 @@ public class StoreApplication {
         Item i6 = new Item("Face Mask", 50, 5, 1, "All the COVID protection you need!");
         Item i7 = new Item("Python for Everybody Book", 23, 40, 10, "Learn Python!");
         Item i8 = new Item("Playstation 5", 3, 700, 400, "Latest Generation console!");
-
         System.out.println("Added 8 items to store.");
 
         Items.add(i1);
@@ -160,32 +149,18 @@ public class StoreApplication {
         Orders.add(o4);
 
         System.out.println("Added 4 orders.");
-
         FileRW.writeOrder(Orders);
         FileRW.writeItems(Items);
         FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), Finances.getTax());
     }
+
     public static ArrayList<Item> getItems() {
         return Items;
     }
-
-    public static void setItems(ArrayList<Item> items) {
-        Items = items;
-    }
-
     public static ArrayList<Customer> getCustomers() {
         return Customers;
     }
-
-    public static void setCustomers(ArrayList<Customer> customers) {
-        Customers = customers;
-    }
-
     public static ArrayList<Order> getOrders() {
         return Orders;
-    }
-
-    public static void setOrders(ArrayList<Order> orders) {
-        Orders = orders;
     }
 }

@@ -1,5 +1,4 @@
 package store;
-
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -30,19 +29,11 @@ public class Order implements Serializable {
             Finances.reduceValue(itemValue);
         }
     }
+
     public Customer getCustomer() {
         return customer;
     }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
     public HashMap<Item, Integer> getItems() {
         return items;
-    }
-
-    public void setItems(HashMap<Item, Integer> items) {
-        this.items = items;
     }
 }

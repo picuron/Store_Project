@@ -44,7 +44,6 @@ public class FileRW {
             for(Item i: Items){
                 o.writeObject(i);
             }
-            // Write objects to file
 
             o.close();
             f.close();

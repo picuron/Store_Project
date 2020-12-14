@@ -380,15 +380,18 @@ public class CustomerView {
         cart = new HashMap<Item, Integer>();
     }
 
+    //Validates all user input required to create a new Customer object (essentially make a customer account)
     public static String validateCustomerInput(String entryName, String correctExample, String regexMatch){
         boolean validEntry = false;
         Scanner inputScanner = new Scanner(System.in);
         String customerEntry = null;
 
         while (!validEntry){
+            //Store user input for new item attribute
             System.out.println("Enter your " + entryName + " (example: " + correctExample + ")");
             customerEntry = inputScanner.nextLine();
 
+            //Validate it using regex
             if(!customerEntry.matches(regexMatch)){
                 System.out.println("Your " + entryName + " is invalid; please try again!");
             } else{
@@ -398,8 +401,12 @@ public class CustomerView {
         return customerEntry;
     }
 
+    //Creates a new Customer object (or customer account) using the above function
     public static Customer createCustomer(){
+        //Creates customer Array
         String[] customer = new String[10];
+        //Populates each index in the array with each customer attribute
+        //The format is [customer attribute] followed by [example] and [regex code used to validate user input]
         customer[0] = validateCustomerInput("name", "Bob", "^[A-Za-z.\\s_-]+$");
         customer[1] = validateCustomerInput("email", "bob@gmail.com", "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
         customer[2] = validateCustomerInput("phone", "123-456-7890","(?:\\d{3}-){2}\\d{4}");
@@ -411,9 +418,13 @@ public class CustomerView {
         customer[8] = validateCustomerInput("credit card expiration date", "12/2022", "(0[1-9]|10|11|12)/20[0-9]{2}$");
         customer[9] = validateCustomerInput("password", "Secure123 (everything except spaces and new lines)","^[^\\n ]*$");
 
+        //Feeds the customer Array into a new Customer object
         Customer c = new Customer(customer[0], customer[1], customer[2], customer[3], customer[4], customer[5], customer[6], customer[7], customer[8], customer[9]);
+        //Adds to all the Customers
         Customers.add(c);
+        //Updates file so all Customers are saved even when terminal is closed and re-opened
         FileRW.writeCustomer(Customers);
+        //Prints out order confirmation and account information to customer
         System.out.println("We have your information saved! Email: " + customer[1] + " | Phone number: " + customer[2]);
         System.out.println("Address: " + customer[3] + ", " + customer[4] + ", " + customer[5] + ", " + customer[6]);
         return c;

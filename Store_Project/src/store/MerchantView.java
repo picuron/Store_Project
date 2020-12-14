@@ -16,6 +16,8 @@ public class MerchantView {
         Customers = StoreApplication.getCustomers();
 
         Scanner inputScanner = new Scanner(System.in);
+
+        //Keeps Merchant menu running after each action is completed
         boolean inProgress = true;
         while (inProgress) {
             boolean validMenuInput = false;
@@ -25,13 +27,16 @@ public class MerchantView {
 
                 int userInputFinal = 0;
 
+                //Exception handling if user inputs invalid menu option
                 try {
                     userInputFinal = Integer.valueOf(userInput);
                 } catch (NumberFormatException e) {
                     validMenuInput = false;
                 }
 
+                //Checks if user input is in the correct numerical range
                 if (userInputFinal > 0 && userInputFinal < 7) {
+                    //Navigates to correct corresponding function based on user input
                     switch (userInputFinal) {
                         case 1:
                             viewStock();
@@ -46,6 +51,7 @@ public class MerchantView {
                             viewCustomers();
                             break;
                         case 5:
+                            //Ends the program in terminal and saves data to file
                             FileRW.writeItems(Items);
                             System.out.println("Bye!");
                             System.exit(1);
@@ -59,6 +65,7 @@ public class MerchantView {
         }
     }
 
+    //Prints ALL information for each item (including COG!)
     public static void viewStock() {
         System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         System.out.println("Items in Stock:");
@@ -69,6 +76,7 @@ public class MerchantView {
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
+        //Merchant can select whether or not they'd like to edit stock or exit and return to Merchant menu
         Scanner inputScanner = new Scanner(System.in);
         System.out.println("[1] Edit stock [2] Exit");
         int userInput = inputScanner.nextInt();
@@ -82,6 +90,7 @@ public class MerchantView {
         }
     }
 
+    //Merchant can select from this menu on how they want to make edit to stock
     public static void changeStock() {
         Scanner inputScanner = new Scanner(System.in);
         System.out.println("[1] Edit/delete a specific item [2] Add a new item [3] Exit");
@@ -99,6 +108,7 @@ public class MerchantView {
         }
     }
 
+    //Allows Merchant to edit a single item
     public static void editStock() {
         Scanner inputScanner = new Scanner(System.in);
         int userInput = 0;
@@ -107,6 +117,7 @@ public class MerchantView {
         boolean validName = false;
         Item selectedItem = null;
 
+        //Validation for user input for what item they want to edit
         while (!validName) {
             System.out.println("Enter the name of the item you want to edit (case sensitive)");
             userStringInput = inputScanner.nextLine();
@@ -124,9 +135,11 @@ public class MerchantView {
             }
         }
 
+        //Another menu that allows the user to determine what action they want to perform to the selected object
         System.out.println("What do you want to edit? [1] Item name [2] Quantity [3] Price [4] COG [5] Description [6] Delete");
         userInput = inputScanner.nextInt();
 
+        //Navigates to correct corresponding function
         switch (userInput) {
             case 1:
                 editItemName(selectedItem);
@@ -154,6 +167,7 @@ public class MerchantView {
         }
     }
 
+    //Edits name of an item
     public static void editItemName(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         String userStringInput = null;
@@ -164,6 +178,7 @@ public class MerchantView {
         viewStock();
     }
 
+    //Edits quantity of an item
     public static void editItemQuantity(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         int userInput = 0;
@@ -174,6 +189,7 @@ public class MerchantView {
         viewStock();
     }
 
+    //Edits price of an item
     public static void editItemPrice(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         double userInput = 0;
@@ -184,6 +200,7 @@ public class MerchantView {
         viewStock();
     }
 
+    //Edits COG of an item
     public static void editItemCOG(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         double userInput = 0;
@@ -194,6 +211,7 @@ public class MerchantView {
         viewStock();
     }
 
+    //Edits description of an item
     public static void editItemDescription(Item selectedItem) {
         Scanner inputScanner = new Scanner(System.in);
         String userInput = null;
@@ -204,10 +222,12 @@ public class MerchantView {
         viewStock();
     }
 
+    //Sets item quantity to 0, which removes it
     public static void removeItem(Item selectedItem) {
         selectedItem.setQuantity(0);
     }
 
+    //Adds another item
     public static void addStock() {
         Scanner inputScanner = new Scanner(System.in);
         String newName = null;
@@ -227,7 +247,10 @@ public class MerchantView {
         boolean validNewDescription = false;
         boolean entryComplete = false;
 
+        //While loop ensures that the entire entry is complete before the method ends
+        //Resolves a bug we had earlier where the method would just exit without allowing the user to input item description
         while (!entryComplete) {
+            //Validates item name (must be String)
             while (!validNewName) {
                 System.out.println("Add the item name");
                 newName = inputScanner.nextLine();
@@ -239,6 +262,7 @@ public class MerchantView {
                 }
             }
 
+            //Validates item quantity (must be int)
             while (!validNewQuantity) {
                 System.out.println("Add the item quantity");
                 newQuantity = inputScanner.nextLine();
@@ -251,6 +275,7 @@ public class MerchantView {
                 }
             }
 
+            //Validates item price (must be double)
             while (!validNewPrice) {
                 System.out.println("Add the item price");
                 newPrice = inputScanner.nextLine();
@@ -264,6 +289,7 @@ public class MerchantView {
                 }
             }
 
+            //Validates item COG (must be double)
             while (!validNewCOG) {
                 System.out.println("Add the item COG");
                 newCOG = inputScanner.nextLine();
@@ -277,6 +303,7 @@ public class MerchantView {
                 }
             }
 
+            //Validates item description (must be String)
             while (!validNewDescription) {
                 System.out.println("Add the item description");
                 newDescription = inputScanner.nextLine();
@@ -288,10 +315,15 @@ public class MerchantView {
                 }
             }
 
+            //Ensures that all of the new variables are valid inputs before creating a new Item
             if (validNewName && validNewQuantity && validNewPrice && validNewCOG && validNewDescription) {
+                //Creates a new item
                 newItem = new Item(newName, newQuantityInt, newPriceDouble, newCOGDouble, newDescription);
+                //Adds to all the Items
                 Items.add(newItem);
+                //Writes to file to save
                 FileRW.writeItems(Items);
+                //Exits the while loop to exit the method!
                 entryComplete = true;
             }
         }

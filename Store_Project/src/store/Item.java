@@ -10,6 +10,7 @@ public class Item implements Serializable {
     private String description;
     private int numSold;
 
+    //Item constructor
     public Item(String name, int quantity, double listPrice, double COG, String description){
         this.itemName = name;
         this.quantity = quantity;
@@ -18,10 +19,12 @@ public class Item implements Serializable {
         this.description = description;
         numSold = 0;
 
+        //Ensure new item financial data is reflected in finance class
         Finances.addCOG(COG*quantity);
         Finances.addValue(listPrice*quantity);
     }
 
+    //Getters/Setters/Increasers/Decreasers
     public int getNumSold(){
         return numSold;
     }

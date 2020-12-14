@@ -2,6 +2,7 @@ package store;
 
 import java.io.Serializable;
 
+
 public class Finances implements Serializable {
 
     private static double revenue;
@@ -10,6 +11,7 @@ public class Finances implements Serializable {
     private static double value;
     private static double tax;
 
+    //Getter/Setter/Increasers/Reducers
     public static void setRevenue(double revenue){
         Finances.revenue = revenue;
     }

@@ -6,7 +6,7 @@ import java.io.File;
 public class DirectoryInitilization {
     public static void Setup(){
 
-        //Create Data directory, and directories for Inventory Data, Order Data and Customer Data
+        //Create Data directory, and directories for Inventory Data, Order Data, Customer Data and Finance Data
         File DataDir = new File("Data");
         File InventoryDir = new File("Data/Inventory");
         File OrderDir = new File("Data/Order");

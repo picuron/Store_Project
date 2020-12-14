@@ -297,21 +297,25 @@ public class MerchantView {
         }
     }
 
+    //Shows the finances
     public static void viewFinances() {
         Scanner inputScanner = new Scanner(System.in);
 
         boolean validMenuInput = false;
+        //Repeats until a valid menu input is given
         while (!validMenuInput) {
             System.out.println("[1] View Finance Data [2] Set Taxes [3] Exit");
             String userInput = inputScanner.nextLine();
             int userInputFinal = 0;
 
+            //Try switching users input into an integer
             try {
                 userInputFinal = Integer.valueOf(userInput);
             } catch (NumberFormatException e) {
                 validMenuInput = false;
             }
 
+            //Ensure user gives a number in the correct range
             if (userInputFinal > 0 && userInputFinal < 4) {
                 switch (userInputFinal) {
                     case 1:
@@ -324,6 +328,7 @@ public class MerchantView {
                         System.out.println("Unsold Inventory Cost of Goods: $" + Finances.getCOG());
                         System.out.println("Unsold Inventory Value: $" + Finances.getValue());
 
+                        //If revenue is 0, output this so we don't get NaN
                         if(Finances.getRevenue() == 0){
                             System.out.println("Current profit margin: 0%");
                         }else{
@@ -333,6 +338,7 @@ public class MerchantView {
                         System.out.println("Current Tax Rate: " + Finances.getTax());
                         Item mostPopular = null;
                         int mostPopularValue = -1;
+                       //Iterate through items to find most popular one
                         for (Item i: Items){
                             if(i.getNumSold() >= mostPopularValue){
                                 mostPopularValue = i.getNumSold();
@@ -347,11 +353,13 @@ public class MerchantView {
                         String taxString;
 
                         System.out.println("Store Finances:");
+                        //Repeats until valid input is given
                         while (!validTax){
                             System.out.println("Enter the tax you'd like to set (Example: 0.13 for 13%): ");
                             taxString = inputScanner.nextLine();
                             double taxDouble = 0;
 
+                            //Try to convert given string to a double
                             try {
                                 taxDouble = Double.valueOf(taxString);
                             } catch (NumberFormatException e) {
@@ -359,6 +367,7 @@ public class MerchantView {
                                 validTax = false;
                             }
 
+                            //Only accept taxes if given in decimal form
                             if(taxDouble >= 0.00 && taxDouble <= 1.00) {
                                 System.out.println("Setting tax to " + taxDouble * 100 + "%");
                                 Finances.setTax(taxDouble);
@@ -379,19 +388,24 @@ public class MerchantView {
         }
     }
 
+    //Show all orders placed on store
     public static void viewOrders(){
 
+        //If there are no orders, output this, else output orders
         if(Orders.isEmpty()){
             System.out.println("You currently have no orders.");
         }
         else{
             System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             int counter = 1;
+
+            //Iterates through all orders in the store
             for(Order o: Orders){
                 HashMap<Item, Integer> items = new HashMap<Item, Integer>();
                 items = o.getItems();
 
                 System.out.println("Order " + counter + ":");
+                //Iterate through items in orders
                 for(Item i: items.keySet()){
                     System.out.println("Item: " + i.getItemName() + " | Quantity: " + items.get(i) + " | Customer: " + o.getCustomer().getName());
                 }
@@ -401,12 +415,15 @@ public class MerchantView {
         }
     }
 
+    //Shows the stores customers
     public static void viewCustomers(){
+        //If store has no customers, output this, else show customers
         if(Customers.isEmpty()){
             System.out.println("You currently have no customers.");
         }
         else{
             int counter = 1;
+            //Iterate through each customer and output details
             for(Customer c: Customers){
                 System.out.println("Customer #" + counter + ":");
                 System.out.println("Customer Name: " + c.getName() + " | Email: " + c.getEmail() + " | Phone Number: " + c.getPhoneNumber()

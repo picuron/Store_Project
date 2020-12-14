@@ -6,6 +6,7 @@ public class Order implements Serializable {
     private Customer customer;
     private HashMap<Item, Integer> items;
 
+    //Order constructor
     public Order(Customer customer, HashMap<Item, Integer> items) {
         this.customer = customer;
         this.items = items;
@@ -13,6 +14,7 @@ public class Order implements Serializable {
         changeFinancials(items);
     }
 
+    //Changes Finances reflecting an order
     private void changeFinancials( HashMap<Item, Integer> items){
         double itemCOG = 0;
         double itemValue = 0;
@@ -30,6 +32,7 @@ public class Order implements Serializable {
         }
     }
 
+    //Getters
     public Customer getCustomer() {
         return customer;
     }

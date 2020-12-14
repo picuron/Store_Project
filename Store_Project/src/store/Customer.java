@@ -14,6 +14,7 @@ public class Customer implements Serializable {
     private String creditCardExpiry;
     private String password;
 
+    //Customer constructor
     public Customer(String name, String email, String phoneNumber, String streetName, String city, String province, String postalCode, String creditCardNumber, String creditCardExpiry, String password) {
         this.name = name;
         this.email = email;
@@ -27,6 +28,7 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
+    //Getter and Setters
     public String getName() {
         return name;
     }

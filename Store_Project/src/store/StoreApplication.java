@@ -12,6 +12,7 @@ public class StoreApplication {
 
     public static void main(String[] args){
 
+        //Initialize Directory, set up new ArrayLists and HashMaps, retrieve data
         DirectoryInitilization.Setup();
         Items = new ArrayList<Item>();
         Customers = new ArrayList<Customer>();
@@ -23,19 +24,24 @@ public class StoreApplication {
         boolean validInput = false;
         String customerInput = null;
         Scanner inputScanner = new Scanner(System.in);
+
+        //If it appears all files are empty, ask user if they want to seed store with data
         if(Items.isEmpty() && Customers.isEmpty() && Orders.isEmpty()){
 
+            //Repeats until valid input given
             while(!validInput) {
                 System.out.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 System.out.println("It appears that your store is empty. Would you like to populate the store with data? If not you will have to start from scratch and add items in yourself. (Y/N)");
                 System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                 customerInput = inputScanner.nextLine();
 
+                //If yes, fill store with data, if no, don't add data.
                 if (customerInput.equals("Y")) {
                     System.out.println("Okay, creating Items, Orders, Customer and Finance Data.");
                     seedStoreData();
                     validInput = true;
-                } else if (customerInput.equals("N")) {
+                }
+                else if (customerInput.equals("N")) {
                     System.out.println("Okay, proceeding with empty store. You will have to go into merchant view and add items.");
                     validInput = true;
                 } else {
@@ -49,12 +55,14 @@ public class StoreApplication {
         boolean isValidInput = false;
         Scanner userInput = new Scanner(System.in);
 
+        //Repeats until valid input given. Asks if user wants to enter as a merchant or as a customer.
         while(!isValidInput){
             System.out.println("Which view would like to enter in?");
             System.out.println("[1] - Merchant View");
             System.out.println("[2] - Customer View");
             String inputString = userInput.nextLine();
 
+            //Try converting input to integer
             try{
                 int inputInt = Integer.valueOf(inputString);
                 if(inputInt == 1){
@@ -74,6 +82,7 @@ public class StoreApplication {
         }
     }
 
+    //If requested, fill files with data
     public static void seedStoreData(){
         Finances.setTax(0.13);
         Item i1 = new Item("Shirt", 30, 40, 15, "Soft, cotton");
@@ -154,6 +163,7 @@ public class StoreApplication {
         FileRW.writeFinances(Finances.getRevenue(), Finances.getProfit(), Finances.getCOG(), Finances.getValue(), Finances.getTax());
     }
 
+    //ArrayList getters
     public static ArrayList<Item> getItems() {
         return Items;
     }
